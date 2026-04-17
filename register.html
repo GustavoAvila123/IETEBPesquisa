@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Cadastrar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=22">
+</head>
+<body class="register-body">
+
+<main class="login-page">
+  <div class="login-brand">
+    <img class="login-brand__logo" src="Logo IETEB.png" alt="IETEB" />
+  </div>
+
+  <section class="login-card" aria-label="Cadastro">
+    <h1 class="login-card__title">Criar perfil</h1>
+    <p class="login-card__subtitle">Os campos com * são obrigatórios!</p>
+
+    <div class="login-form">
+      <label class="login-field">
+        <span class="login-field__label">Nome e sobrenome *</span>
+        <input class="login-field__input" type="text" id="fullName" placeholder="Seu nome completo" autocomplete="name" inputmode="text" maxlength="80" pattern="^[A-Za-zÀ-ÖØ-öø-ÿ]+(?:\s+[A-Za-zÀ-ÖØ-öø-ÿ]+)+$" />
+      </label>
+      <div class="field-error" id="fullNameError" aria-live="polite"></div>
+
+      <label class="login-field">
+        <span class="login-field__label">Data de nascimento *</span>
+        <input class="login-field__input" type="text" id="birthDate" placeholder="dd/mm/aaaa" inputmode="numeric" autocomplete="bday" />
+      </label>
+      <div class="field-error" id="birthDateError" aria-live="polite"></div>
+
+      <label class="login-field">
+        <span class="login-field__label">Cidade *</span>
+        <input type="hidden" id="city" value="" autocomplete="address-level2" />
+        <button class="login-field__input church-picker" id="cityPickerButton" type="button" aria-haspopup="listbox" aria-expanded="false">
+          <span id="cityPickerLabel">Selecione sua cidade</span>
+          <span class="church-picker__chevron" aria-hidden="true"></span>
+        </button>
+        <div class="church-picker__overlay" id="cityPickerOverlay" aria-hidden="true">
+          <div class="church-picker__panel" role="listbox" aria-label="Selecione sua cidade">
+            <button class="church-picker__option" type="button" data-value="Barueri">Barueri</button>
+            <button class="church-picker__option" type="button" data-value="Carapicuíba">Carapicuíba</button>
+            <button class="church-picker__option" type="button" data-value="Cotia">Cotia</button>
+            <button class="church-picker__option" type="button" data-value="Diadema">Diadema</button>
+            <button class="church-picker__option" type="button" data-value="Embu das Artes">Embu das Artes</button>
+            <button class="church-picker__option" type="button" data-value="Guarulhos">Guarulhos</button>
+            <button class="church-picker__option" type="button" data-value="Itapevi">Itapevi</button>
+            <button class="church-picker__option" type="button" data-value="Jandira">Jandira</button>
+            <button class="church-picker__option" type="button" data-value="Mauá">Mauá</button>
+            <button class="church-picker__option" type="button" data-value="Osasco">Osasco</button>
+            <button class="church-picker__option" type="button" data-value="Santana de Parnaíba">Santana de Parnaíba</button>
+            <button class="church-picker__option" type="button" data-value="Santo André">Santo André</button>
+            <button class="church-picker__option" type="button" data-value="São Bernardo do Campo">São Bernardo do Campo</button>
+            <button class="church-picker__option" type="button" data-value="São Caetano do Sul">São Caetano do Sul</button>
+            <button class="church-picker__option" type="button" data-value="São Paulo">São Paulo</button>
+            <button class="church-picker__option" type="button" data-value="Taboão da Serra">Taboão da Serra</button>
+          </div>
+        </div>
+      </label>
+      <div class="field-error" id="cityError" aria-live="polite"></div>
+
+      <label class="login-field">
+        <span class="login-field__label">Telefone *</span>
+        <input class="login-field__input" type="tel" id="phone" placeholder="(11) 9 1234-1234" autocomplete="tel" />
+      </label>
+      <div class="field-error" id="phoneError" aria-live="polite"></div>
+
+      <label class="login-field">
+        <span class="login-field__label">E-mail *</span>
+        <input class="login-field__input" type="email" id="registerEmail" placeholder="seu@email.com" autocomplete="email" />
+      </label>
+      <div class="field-error" id="registerEmailError" aria-live="polite"></div>
+
+      <label class="login-field">
+        <span class="login-field__label">Igreja *</span>
+        <input type="hidden" id="church" value="" autocomplete="organization" />
+        <button class="login-field__input church-picker" id="churchPickerButton" type="button" aria-haspopup="listbox" aria-expanded="false">
+          <span id="churchPickerLabel">Selecione sua igreja</span>
+          <span class="church-picker__chevron" aria-hidden="true"></span>
+        </button>
+        <div class="church-picker__overlay" id="churchPickerOverlay" aria-hidden="true">
+          <div class="church-picker__panel" role="listbox" aria-label="Selecione sua igreja">
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco 1 de Maio">Ad Brás Osasco 1 de Maio</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Açucara">Ad Brás Osasco Açucara</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Bandeiras">Ad Brás Osasco Bandeiras</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Bonança">Ad Brás Osasco Bonança</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Conceição">Ad Brás Osasco Conceição</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Conj. Metalúrgicos">Ad Brás Osasco Conj. Metalúrgicos</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Corrego Rico">Ad Brás Osasco Corrego Rico</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Flamenguinho">Ad Brás Osasco Flamenguinho</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Flor da Primavera">Ad Brás Osasco Flor da Primavera</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Guanabara">Ad Brás Osasco Guanabara</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Helena Maria I">Ad Brás Osasco Helena Maria I</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Helena Maria II">Ad Brás Osasco Helena Maria II</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Jandaia">Ad Brás Osasco Jandaia</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Jd D'Abril SP">Ad Brás Osasco Jd D'Abril SP</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Jd D'Abril Osasco">Ad Brás Osasco Jd D'Abril Osasco</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Joelma">Ad Brás Osasco Joelma</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Jussara">Ad Brás Osasco Jussara</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Munhoz Junior">Ad Brás Osasco Munhoz Junior</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Mutinga I">Ad Brás Osasco Mutinga I</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Mutinga II">Ad Brás Osasco Mutinga II</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Mutinga Ômega">Ad Brás Osasco Mutinga Ômega</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Novo Horizonte">Ad Brás Osasco Novo Horizonte</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Novo Osasco">Ad Brás Osasco Novo Osasco</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Padroeira II">Ad Brás Osasco Padroeira II</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Parque Imperial I">Ad Brás Osasco Parque Imperial I</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Parque Imperial II">Ad Brás Osasco Parque Imperial II</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Piratininga">Ad Brás Osasco Piratininga</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Portela">Ad Brás Osasco Portela</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Presidente Altino">Ad Brás Osasco Presidente Altino</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Quitaúna">Ad Brás Osasco Quitaúna</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Recanto das Rosas 1">Ad Brás Osasco Recanto das Rosas 1</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Samambaia">Ad Brás Osasco Samambaia</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Santa Maria">Ad Brás Osasco Santa Maria</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Santo Antonio">Ad Brás Osasco Santo Antonio</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Sede">Ad Brás Osasco Sede</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco São João da Bela Vista">Ad Brás Osasco São João da Bela Vista</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco São Vitor">Ad Brás Osasco São Vitor</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Teresa">Ad Brás Osasco Teresa</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Três Montanhas">Ad Brás Osasco Três Montanhas</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Vila Dirce">Ad Brás Osasco Vila Dirce</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Vila dos Andrades">Ad Brás Osasco Vila dos Andrades</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Vila Menck">Ad Brás Osasco Vila Menck</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Vila Simões">Ad Brás Osasco Vila Simões</button>
+            <button class="church-picker__option" type="button" data-value="Ad Brás Osasco Ypê">Ad Brás Osasco Ypê</button>
+          </div>
+        </div>
+      </label>
+      <div class="field-error" id="churchError" aria-live="polite"></div>
+
+      <label class="login-field">
+        <span class="login-field__label">Cargo *</span>
+        <input type="hidden" id="role" value="" autocomplete="organization-title" />
+        <button class="login-field__input church-picker" id="rolePickerButton" type="button" aria-haspopup="listbox" aria-expanded="false">
+          <span id="rolePickerLabel">Selecione seu cargo</span>
+          <span class="church-picker__chevron" aria-hidden="true"></span>
+        </button>
+        <div class="church-picker__overlay" id="rolePickerOverlay" aria-hidden="true">
+          <div class="church-picker__panel" role="listbox" aria-label="Selecione seu cargo">
+            <button class="church-picker__option" type="button" data-value="Pastor">Pastor</button>
+            <button class="church-picker__option" type="button" data-value="Evangelista">Evangelista</button>
+            <button class="church-picker__option" type="button" data-value="Presbítero">Presbítero</button>
+            <button class="church-picker__option" type="button" data-value="Díacono">Díacono</button>
+            <button class="church-picker__option" type="button" data-value="Cooperador">Cooperador</button>
+            <button class="church-picker__option" type="button" data-value="Aux. Interno">Aux. Interno</button>
+          </div>
+        </div>
+      </label>
+      <div class="field-error" id="roleError" aria-live="polite"></div>
+
+      <label class="login-field">
+        <span class="login-field__label">Anos no Ministério *</span>
+        <input class="login-field__input" type="text" id="ministryYears" placeholder="Ex: 5" inputmode="numeric" autocomplete="off" maxlength="2" pattern="^\d{1,2}$" />
+      </label>
+      <div class="field-error" id="ministryYearsError" aria-live="polite"></div>
+
+      <label class="login-field">
+        <span class="login-field__label">Senha *</span>
+        <div class="login-field__input-wrap">
+          <input class="login-field__input" type="password" id="registerPassword" placeholder="Crie uma senha" autocomplete="new-password" />
+          <button class="password-toggle" type="button" aria-label="Mostrar senha" onclick="toggleRegisterPassword(this)"></button>
+        </div>
+      </label>
+      <div class="field-error" id="registerPasswordError" aria-live="polite"></div>
+
+      <div class="field-error" id="registerSubmitError" aria-live="polite"></div>
+      <button class="login-submit" id="registerSubmitButton" onclick="createProfile()" disabled>Criar perfil</button>
+
+      <a class="login-link" href="index.html">Voltar para o login</a>
+    </div>
+  </section>
+
+  <footer class="login-footer">Centro Educacional Teológico - IETEB</footer>
+</main>
+
+<div class="loading-overlay" id="registerLoading" aria-hidden="true">
+  <video class="loading-media" src="Loading.mp4" autoplay loop muted playsinline></video>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="app.js?v=30"></script>
+
+<script>
+  function toggleRegisterPassword(buttonEl) {
+    const el = document.getElementById('registerPassword');
+    if (!el) return;
+    const nextType = el.type === 'password' ? 'text' : 'password';
+    el.type = nextType;
+    if (buttonEl) {
+      const isOpen = nextType === 'text';
+      buttonEl.classList.toggle('is-open', isOpen);
+      buttonEl.setAttribute('aria-label', isOpen ? 'Ocultar senha' : 'Mostrar senha');
+    }
+  }
+</script>
+
+</body>
+</html>

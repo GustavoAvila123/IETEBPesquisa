@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=22">
+</head>
+
+<body>
+
+  <main class="home-page" aria-label="Home">
+    <header class="home-header">
+      <h1 class="home-title" id="homeGreeting">Olá</h1>
+      <p class="home-subtitle" id="homeHeaderSubtitle">Bem-vindo à sua sala de estudo</p>
+    </header>
+
+        <section class="home-content">
+          <section class="home-tab is-active" id="tabHome" aria-label="Início">
+            <div class="home-card home-ebook">
+              <div class="home-ebook__title">SUGESTÃO DE LIVROS</div>
+
+              <div class="home-carousel" id="ebookCarousel" aria-roledescription="carrossel">
+                <div class="home-carousel__viewport" id="ebookCarouselViewport">
+                  <div class="home-carousel__track" id="ebookCarouselTrack">
+                    <article class="home-carousel__slide" data-index="0">
+                      <div class="home-ebook-card">
+                        <div class="home-ebook-card__tag">E-book</div>
+                        <div class="home-ebook-card__name">A Guerra da Mente</div>
+                        <div class="home-ebook-card__desc">Uma leitura estratégica para fortalecer decisões, disciplina
+                          e
+                          liderança.</div>
+                        <a class="home-ebook-card__button" href="https://loja.belchiorjunior.com.br/a-guerra-da-mente/p"
+                          target="_blank" rel="noopener noreferrer">Comprar</a>
+                      </div>
+                    </article>
+
+                    <article class="home-carousel__slide" data-index="1">
+                      <div class="home-ebook-card">
+                        <div class="home-ebook-card__tag">E-book</div>
+                        <div class="home-ebook-card__name">Além do Púlpito</div>
+                        <div class="home-ebook-card__desc">Princípios práticos para uma liderança que permanece fora dos
+                          holofotes.</div>
+                        <a class="home-ebook-card__button" href="https://loja.belchiorjunior.com.br/alem-do-pulpito/p"
+                          target="_blank" rel="noopener noreferrer">Comprar</a>
+                      </div>
+                    </article>
+                  </div>
+                </div>
+
+                <div class="home-carousel__dots" role="tablist" aria-label="Navegação do carrossel">
+                  <button class="home-carousel__dot is-active" type="button" data-index="0"
+                    aria-label="Mostrar A Guerra da Mente"></button>
+                  <button class="home-carousel__dot" type="button" data-index="1"
+                    aria-label="Mostrar Além do Púlpito"></button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="home-tab" id="tabTrail" aria-label="Trilha">
+            <div class="home-card">
+
+              <div class="library-item is-collapsed" id="trilhaCard">
+
+                <div class="library-item__header" style="justify-content: space-between;">
+
+                  <div class="library-item__body">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <span style="color: #D4AF37;">🏆</span>
+
+                      <p class="library-item__title" style="margin: 0;">
+                        Introdução Bíblica
+                      </p>
+
+                      <span id="progressoTrilha" style="
+    margin-left: auto;
+    font-size: 12px;
+    color: rgba(212,175,55,0.9);
+  ">
+                        0/0
+                      </span>
+                    </div>
+                  </div>
+
+                  <button id="toggleTrilha" class="library-item__toggle">
+                    ▼
+                  </button>
+
+                </div>
+
+                <div class="library-item__panel">
+
+                  <!-- CARD 1 -->
+                  <div class="library-item">
+                    <div class="library-item__header">
+
+                      <div class="library-item__body">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                          <span class="flag-item"></span>
+                          <p class="library-item__title" style="margin: 0;">As Raízes do Vitimismo</p>
+                        </div>
+                        <p class="library-item__summary resumo-curto">
+                          Uma leitura direta e necessária sobre como o vitimismo se forma, se alimenta e impacta
+                          decisões.
+                        </p>
+
+                        <div class="library-item__footer">
+                          <div class="library-item__meta">
+
+                            <a class="library-item__pill library-item__pill--download" href="Raízes do vitimismo.pdf"
+                              download>
+                              PDF / Texto
+                            </a>
+
+                            <a class="library-item__pill library-item__pill--download"
+                              href="Raízes do vitimismo Video.mp4" target="_blank">
+                              Vídeo
+                            </a>
+
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <!-- CARD 2 -->
+                  <div class="library-item">
+                    <div class="library-item__header">
+
+                      <div class="library-item__body">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                          <span class="flag-item"></span>
+                          <p class="library-item__title" style="margin: 0;">5 Porquês</p>
+                        </div>
+                        <p class="library-item__summary resumo-curto">
+                          Um método simples, prático e profundo para sair do sintoma e chegar à raiz.
+                        </p>
+
+                        <div class="library-item__footer">
+                          <div class="library-item__meta">
+
+                            <a class="library-item__pill library-item__pill--download" href="5_porques.pdf" download>
+                              PDF / Texto
+                            </a>
+
+                            <a class="library-item__pill library-item__pill--download" href="5 Porques Video.mp4"
+                              target="_blank">
+                              Vídeo
+                            </a>
+
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+          </section>
+
+          <section class="home-tab" id="tabMessages" aria-label="Mensagens">
+            <div class="home-card">
+              <div class="home-card__title">Mensagens</div>
+              <div class="home-card__text">Em breve</div>
+            </div>
+          </section>
+
+          <section class="home-tab" id="tabLibrary" aria-label="Biblioteca">
+            <div class="home-card">
+              <div class="library-list" id="libraryList" aria-live="polite"></div>
+            </div>
+          </section>
+
+          <section class="home-tab" id="tabProfile" aria-label="Perfil">
+            <div class="home-card">
+              <div class="home-profile" id="profileContainer" aria-live="polite"></div>
+              <div class="field-error" id="profileError" aria-live="polite"></div>
+            </div>
+          </section>
+        </section>
+
+        <nav class="home-nav" aria-label="Navegação">
+          <button class="home-nav__item is-active" type="button" data-tab="home">
+            <span class="home-nav__icon home-nav__icon--home" aria-hidden="true"></span>
+            <span class="home-nav__label">Início</span>
+          </button>
+          <button class="home-nav__item" type="button" data-tab="trail">
+            <span class="home-nav__icon home-nav__icon--trail" aria-hidden="true"></span>
+            <span class="home-nav__label">Trilha</span>
+          </button>
+          <button class="home-nav__item" type="button" data-tab="messages">
+            <span class="home-nav__icon home-nav__icon--messages" aria-hidden="true"></span>
+            <span class="home-nav__label">Mensagens</span>
+          </button>
+          <button class="home-nav__item" type="button" data-tab="library">
+            <span class="home-nav__icon home-nav__icon--library" aria-hidden="true"></span>
+            <span class="home-nav__label">Biblioteca</span>
+          </button>
+          <button class="home-nav__item" type="button" data-tab="profile">
+            <span class="home-nav__icon home-nav__icon--profile" aria-hidden="true"></span>
+            <span class="home-nav__label">Perfil</span>
+          </button>
+        </nav>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="app.js?v=30"></script>
+
+</body>
+
+</html>
