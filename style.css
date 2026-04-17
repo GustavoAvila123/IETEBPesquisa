@@ -81,6 +81,7 @@ body.modal-open {
   height: 100vh;
   height: 100svh;
   height: -webkit-fill-available;
+  height: calc(var(--vh, 1vh) * 100);
   min-height: unset;
   overflow: hidden;
 
@@ -711,7 +712,7 @@ body.register-body .church-picker {
 }
 
 .login-footer {
-  position: absolute;
+  position: fixed;
   bottom: max(10px, env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%);
@@ -978,6 +979,83 @@ body.register-body .church-picker {
     font-size: 10px;
     margin-bottom: max(0px, env(safe-area-inset-bottom));
     padding: 7px 12px;
+  }
+}
+
+@media (max-height: 560px) {
+  .login-page {
+    row-gap: 6px;
+    padding: 6px 12px 4px;
+    align-content: start;
+  }
+
+  .login-brand {
+    margin-bottom: 4px;
+  }
+
+  .login-brand__logo {
+    width: clamp(60px, 11vh, 80px);
+    height: clamp(60px, 11vh, 80px);
+    border-radius: 12px;
+  }
+
+  .login-card {
+    padding: 10px 12px;
+    border-radius: 14px;
+    margin-bottom: 36px;
+  }
+
+  .login-card__title {
+    font-size: 18px;
+    margin: 4px 0 2px;
+  }
+
+  .login-card__subtitle {
+    font-size: 10px;
+    margin-bottom: 6px;
+  }
+
+  .login-error-summary {
+    min-height: 12px;
+    margin: 0 0 8px;
+  }
+
+  .login-form {
+    gap: 6px;
+  }
+
+  .login-field {
+    gap: 3px;
+  }
+
+  .login-field__label {
+    font-size: 10px;
+  }
+
+  .login-field__input {
+    height: 30px;
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+
+  .password-toggle {
+    width: 26px;
+    height: 26px;
+  }
+
+  .login-submit {
+    height: 34px;
+    margin-top: 2px;
+  }
+
+  .login-link {
+    font-size: 10px;
+    margin-top: 0;
+  }
+
+  .login-footer {
+    font-size: 9px;
+    padding: 5px 10px;
   }
 }
 

@@ -10,7 +10,14 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=22">
+  <link rel="stylesheet" href="style.css?v=23">
+  <script>
+    (function(){
+      function setVH(){ document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px'); }
+      setVH();
+      window.addEventListener('resize', setVH, { passive: true });
+    })();
+  </script>
 </head>
 
 <body class="login-body" onclick="">
