@@ -8,14 +8,13 @@ body {
 
 body.login-body {
   overflow: hidden;
+  height: 100vh;
   height: 100svh;
+  height: -webkit-fill-available;
   overscroll-behavior: none;
-
-  /* ❌ REMOVER ISSO */
-  /* position: fixed; */
-  /* inset: 0; */
-
   width: 100%;
+  position: fixed;
+  inset: 0;
 }
 
 body.register-body {
@@ -79,7 +78,11 @@ body.modal-open {
   padding-bottom: clamp(8px, 2vh, 16px);
 
   position: relative;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100svh;
+  height: -webkit-fill-available;
+  min-height: unset;
+  overflow: hidden;
 
   background:
     radial-gradient(circle at 70% 30%, rgba(0, 153, 255, 0.25), transparent 40%),
