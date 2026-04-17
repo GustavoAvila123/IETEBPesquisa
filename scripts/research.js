@@ -128,8 +128,10 @@ function fecharModal() {
   document.getElementById("perguntaDiasPresencial").style.display = "none";
 
   document.getElementById("nomeCompleto").value = "";
+  document.getElementById("telefonePesquisa").value = "";
   document.getElementById("emailPesquisa").value = "";
   document.getElementById("erroNome").textContent = "";
+  document.getElementById("erroTelefone").textContent = "";
   document.getElementById("erroEmail").textContent = "";
 
   [
@@ -183,6 +185,7 @@ function coletarRespostas() {
   const val = id => (document.getElementById(id) || {}).dataset?.value || "";
   return {
     nome:           document.getElementById("nomeCompleto")?.value || "",
+    telefone:       document.getElementById("telefonePesquisa")?.value || "",
     email:          document.getElementById("emailPesquisa")?.value || "",
     interesse:      val("selectInteresse"),
     curso:          val("selectCurso"),
@@ -303,6 +306,17 @@ function initSelectInteresse() {
       if (value === "nao") {
         modalJaAberto = true;
         document.getElementById("researchModal").style.display = "none";
+
+        if (window.db) {
+          window.db.collection("pesquisas").add({
+            nome:        document.getElementById("nomeCompleto")?.value || "",
+            telefone:    document.getElementById("telefonePesquisa")?.value || "",
+            email:       document.getElementById("emailPesquisa")?.value || "",
+            interesse:   "nao",
+            respondidoEm: new Date().toISOString()
+          }).catch(err => console.error("Erro ao salvar resposta 'não':", err));
+        }
+
         abrirObrigado();
       }
     });

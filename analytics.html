@@ -237,6 +237,7 @@
           <tr>
             <th>#</th>
             <th>Nome</th>
+            <th>Telefone</th>
             <th>E-mail</th>
             <th>Curso</th>
             <th>Formato</th>
@@ -376,13 +377,14 @@
     function renderTabela(docs) {
       const tbody = document.getElementById("tabelaRespostas");
       if (docs.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" id="emptyMsg">Nenhuma resposta ainda.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="10" id="emptyMsg">Nenhuma resposta ainda.</td></tr>';
         return;
       }
       tbody.innerHTML = docs.map((d, i) => `
         <tr>
           <td>${i + 1}</td>
           <td>${d.nome || "—"}</td>
+          <td>${d.telefone || "—"}</td>
           <td>${d.email || "—"}</td>
           <td>${label("curso", d.curso)}</td>
           <td>${label("formato", d.formato)}</td>

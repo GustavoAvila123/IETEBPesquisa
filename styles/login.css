@@ -258,6 +258,17 @@ body.register-body .church-picker {
   filter: grayscale(0.25);
 }
 
+#loginSubmitBtn {
+  background: linear-gradient(90deg, #1c2e5e, #1a4a72);
+  box-shadow: 0 0 6px rgba(0, 80, 140, 0.3);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+#loginSubmitBtn:hover {
+  filter: none;
+  box-shadow: 0 0 6px rgba(0, 80, 140, 0.3);
+}
+
 .login-link {
   text-align: center;
   font-size: 12px;

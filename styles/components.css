@@ -242,6 +242,27 @@
   flex-shrink: 0;
 }
 
+#modalBoxResponda {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: 24px;
+}
+
+#modalBoxResponda h2 {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.popup-clipboard {
+  width: 110px;
+  height: 126px;
+  display: block;
+  flex-shrink: 0;
+}
+
 #modalBoxObrigado {
   display: flex;
   flex-direction: column;
