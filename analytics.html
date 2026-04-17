@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IETEB — Analytics da Pesquisa</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      background: linear-gradient(180deg, #0b1f5c 0%, #081633 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 24px 16px;
+    }
+
+    /* ── AUTH ── */
+    #authScreen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 16px;
+    }
+    #authScreen h2 { font-size: 20px; color: #cfe3ff; }
+    #authScreen input {
+      width: 260px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(0,153,255,0.4);
+      background: rgba(0,0,0,0.4);
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+    }
+    #authScreen button {
+      width: 260px;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: linear-gradient(135deg, #0099ff, #0055cc);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    #authError { color: #ff6b6b; font-size: 13px; }
+
+    /* ── DASHBOARD ── */
+    #dashboard { display: none; }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    header h1 { font-size: 22px; color: #cfe3ff; }
+
+    #totalBadge {
+      background: rgba(0,153,255,0.2);
+      border: 1px solid rgba(0,153,255,0.4);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 14px;
+      color: #7dd3fc;
+    }
+
+    #liveIndicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #86efac;
+    }
+    #liveIndicator span {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; } 50% { opacity: 0.3; }
+    }
+
+    /* ── GRID ── */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(0,153,255,0.2);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    .card h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #7dd3fc;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      flex-shrink: 0;
+    }
+    .chart-wrap {
+      position: relative;
+      height: 220px;
+    }
+
+    /* ── TABLE ── */
+    .table-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(0,153,255,0.2);
+      border-radius: 16px;
+      padding: 20px;
+      overflow-x: auto;
+    }
+    .table-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .table-header h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #7dd3fc;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    #filtroCurso {
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(0,153,255,0.4);
+      background: rgba(0,0,0,0.45);
+      color: #e2e8f0;
+      font-size: 13px;
+      cursor: pointer;
+      outline: none;
+    }
+    #filtroCurso option { background: #0b1f5c; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th {
+      text-align: left;
+      padding: 10px 12px;
+      background: rgba(0,153,255,0.15);
+      color: #7dd3fc;
+      white-space: nowrap;
+    }
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      color: #e2e8f0;
+      white-space: nowrap;
+    }
+    tr:hover td { background: rgba(255,255,255,0.04); }
+    #emptyMsg { text-align: center; color: #64748b; padding: 24px; }
+  </style>
+</head>
+<body>
+
+  <!-- TELA DE ACESSO -->
+  <div id="authScreen">
+    <h2>Analytics — IETEB Pesquisa</h2>
+    <input type="password" id="senhaInput" placeholder="Senha de acesso" onkeydown="if(event.key==='Enter') verificarSenha()" />
+    <button onclick="verificarSenha()">Entrar</button>
+    <p id="authError"></p>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard">
+    <header>
+      <h1>📊 Analytics da Pesquisa</h1>
+      <div id="liveIndicator"><span></span> Atualização em tempo real</div>
+      <div id="totalBadge">0 respostas</div>
+    </header>
+
+    <div class="charts-grid">
+      <div class="card">
+        <h3>Cursos de Interesse</h3>
+        <div class="chart-wrap"><canvas id="chartCurso"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Formato de Estudo</h3>
+        <div class="chart-wrap"><canvas id="chartFormato"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Local Preferido</h3>
+        <div class="chart-wrap"><canvas id="chartLocal"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Dias — Aulas Ao Vivo</h3>
+        <div class="chart-wrap"><canvas id="chartDiasAoVivo"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Dias — Presencial</h3>
+        <div class="chart-wrap"><canvas id="chartDiasPresencial"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Regional</h3>
+        <div class="chart-wrap"><canvas id="chartRegional"></canvas></div>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-header">
+        <h3>Todas as Respostas</h3>
+        <select id="filtroCurso">
+          <option value="">Todos os cursos</option>
+          <option value="bacharel">Bacharel em Teologia</option>
+          <option value="basico">Básico em Teologia</option>
+          <option value="professor">Cap. de Professor</option>
+          <option value="cfam">CFAM</option>
+        </select>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Curso</th>
+            <th>Formato</th>
+            <th>Local</th>
+            <th>Regional</th>
+            <th>Dias</th>
+            <th>Data</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaRespostas">
+          <tr><td colspan="9" id="emptyMsg">Carregando...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    Chart.register(ChartDataLabels);
+
+    const SENHA = "ieteb2025";
+
+    function verificarSenha() {
+      const entrada = document.getElementById("senhaInput").value;
+      if (entrada === SENHA) {
+        sessionStorage.setItem("analytics_ok", "1");
+        document.getElementById("authScreen").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+        iniciarDashboard();
+      } else {
+        document.getElementById("authError").textContent = "Senha incorreta.";
+      }
+    }
+
+    if (sessionStorage.getItem("analytics_ok") === "1") {
+      document.getElementById("authScreen").style.display = "none";
+      document.getElementById("dashboard").style.display = "block";
+    }
+
+    // ── LABELS ──
+    const LABELS = {
+      curso:    { bacharel: "Bacharel em Teologia", basico: "Básico em Teologia", professor: "Cap. de Professor", cfam: "CFAM" },
+      formato:  { "ao-vivo": "Online + Ao Vivo", ead: "Online (EAD)", presencial: "Presencial" },
+      local:    { nucleo: "Núcleo Regional", sede: "Igreja Sede" },
+      dias:     { semana: "Seg, Ter e Qui", sabado: "Sábado" },
+      regional: { "nao-sei": "Não sei" }
+    };
+
+    const COLORS = [
+      "rgba(59,130,246,0.85)", "rgba(16,185,129,0.85)", "rgba(245,158,11,0.85)",
+      "rgba(239,68,68,0.85)",  "rgba(168,85,247,0.85)", "rgba(236,72,153,0.85)",
+      "rgba(14,165,233,0.85)", "rgba(34,197,94,0.85)",  "rgba(251,146,60,0.85)",
+      "rgba(148,163,184,0.85)","rgba(99,102,241,0.85)", "rgba(20,184,166,0.85)"
+    ];
+
+    const charts = {};
+    let allDocs = [];
+
+    function label(campo, valor) {
+      if (!valor) return "—";
+      return (LABELS[campo] && LABELS[campo][valor]) || valor;
+    }
+
+    function contar(docs, campo) {
+      const counts = {};
+      docs.forEach(d => {
+        const v = d[campo] || "";
+        if (v) counts[v] = (counts[v] || 0) + 1;
+      });
+      return counts;
+    }
+
+    function getFilteredDocs() {
+      const curso = document.getElementById("filtroCurso")?.value || "";
+      return curso ? allDocs.filter(d => d.curso === curso) : allDocs;
+    }
+
+    function renderChart(id, tipo, keys, dados, labelMap) {
+      const ctx = document.getElementById(id).getContext("2d");
+      const isDoughnut = tipo === "doughnut";
+      const labelsFormatados = keys.map(l => labelMap ? (labelMap[l] || l) : l);
+
+      if (charts[id]) {
+        charts[id].data.labels = labelsFormatados;
+        charts[id].data.datasets[0].data = dados;
+        charts[id].data.datasets[0].backgroundColor = COLORS.slice(0, dados.length);
+        charts[id].update();
+        return;
+      }
+
+      charts[id] = new Chart(ctx, {
+        type: tipo,
+        data: {
+          labels: labelsFormatados,
+          datasets: [{
+            label: "",
+            data: dados,
+            backgroundColor: COLORS.slice(0, dados.length),
+            borderColor: "rgba(255,255,255,0.1)",
+            borderWidth: 1,
+            borderRadius: isDoughnut ? 0 : 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: isDoughnut,
+              labels: { color: "#e2e8f0", font: { size: 12 } },
+              position: "bottom"
+            },
+            datalabels: {
+              color: "#fff",
+              font: { size: 13, weight: "bold" },
+              anchor: isDoughnut ? "center" : "end",
+              align: isDoughnut ? "center" : "top",
+              offset: isDoughnut ? 0 : -2,
+              formatter: v => (v > 0 ? v : null)
+            }
+          },
+          scales: isDoughnut ? {} : {
+            x: { ticks: { color: "#94a3b8" }, grid: { color: "rgba(255,255,255,0.05)" } },
+            y: {
+              ticks: { color: "#94a3b8", stepSize: 1 },
+              grid: { color: "rgba(255,255,255,0.05)" },
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    function renderTabela(docs) {
+      const tbody = document.getElementById("tabelaRespostas");
+      if (docs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" id="emptyMsg">Nenhuma resposta ainda.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = docs.map((d, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${d.nome || "—"}</td>
+          <td>${d.email || "—"}</td>
+          <td>${label("curso", d.curso)}</td>
+          <td>${label("formato", d.formato)}</td>
+          <td>${label("local", d.local)}</td>
+          <td>${label("regional", d.regional) !== "—" ? label("regional", d.regional) : (d.regional || "—")}</td>
+          <td>${label("dias", d.diasAoVivo || d.diasPresencial)}</td>
+          <td>${d.respondidoEm ? new Date(d.respondidoEm).toLocaleString("pt-BR") : "—"}</td>
+        </tr>`).join("");
+    }
+
+    function atualizarDashboard(docs) {
+      const total = allDocs.length;
+      const filtrado = docs.length;
+      const filtroAtivo = document.getElementById("filtroCurso")?.value;
+      document.getElementById("totalBadge").textContent =
+        filtroAtivo ? `${filtrado} de ${total} respostas` : `${total} resposta${total !== 1 ? "s" : ""}`;
+
+      const cur = contar(docs, "curso");
+      const fmt = contar(docs, "formato");
+      const loc = contar(docs, "local");
+      const dav = contar(docs, "diasAoVivo");
+      const dpr = contar(docs, "diasPresencial");
+      const reg = contar(docs, "regional");
+
+      renderChart("chartCurso",          "doughnut", Object.keys(cur), Object.values(cur), LABELS.curso);
+      renderChart("chartFormato",        "bar",      Object.keys(fmt), Object.values(fmt), LABELS.formato);
+      renderChart("chartLocal",          "doughnut", Object.keys(loc), Object.values(loc), LABELS.local);
+      renderChart("chartDiasAoVivo",     "bar",      Object.keys(dav), Object.values(dav), LABELS.dias);
+      renderChart("chartDiasPresencial", "bar",      Object.keys(dpr), Object.values(dpr), LABELS.dias);
+      renderChart("chartRegional",       "bar",      Object.keys(reg), Object.values(reg), LABELS.regional);
+
+      renderTabela(docs);
+    }
+
+    function iniciarDashboard() {
+      document.getElementById("filtroCurso").addEventListener("change", () => {
+        atualizarDashboard(getFilteredDocs());
+      });
+
+      try {
+        const app = firebase.apps.find(a => a.name === "pesquisa") ||
+          firebase.initializeApp({
+            apiKey: "AIzaSyAop69pcEdUQSwzVPFbC6s2kz-WP8xCpPg",
+            authDomain: "ieteb-197a7.firebaseapp.com",
+            projectId: "ieteb-197a7",
+            storageBucket: "ieteb-197a7.firebasestorage.app",
+            messagingSenderId: "316684215949",
+            appId: "1:316684215949:web:a6af5693ff1ee24569e4c4"
+          }, "pesquisa");
+
+        app.firestore()
+          .collection("pesquisas")
+          .orderBy("respondidoEm", "desc")
+          .onSnapshot(snap => {
+            allDocs = snap.docs.map(d => d.data());
+            atualizarDashboard(getFilteredDocs());
+          }, err => console.error("Firestore:", err));
+
+      } catch (e) {
+        console.error("Firebase analytics:", e);
+      }
+    }
+
+    if (sessionStorage.getItem("analytics_ok") === "1") {
+      iniciarDashboard();
+    }
+  </script>
+</body>
+</html>
