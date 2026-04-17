@@ -7,7 +7,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=22">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/login.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/responsive.css">
 </head>
 <body class="register-body">
 
@@ -179,13 +182,16 @@
 </main>
 
 <div class="loading-overlay" id="registerLoading" aria-hidden="true">
-  <video class="loading-media" src="Loading.mp4" autoplay loop muted playsinline></video>
+  <video class="loading-media" src="assets/media/Loading.mp4" autoplay loop muted playsinline></video>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-<script src="app.js?v=30"></script>
+<script src="scripts/firebase-config.js"></script>
+<script src="scripts/utils.js"></script>
+<script src="scripts/validation.js"></script>
+<script src="scripts/auth.js"></script>
 
 <script>
   function toggleRegisterPassword(buttonEl) {

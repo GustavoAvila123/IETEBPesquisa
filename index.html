@@ -10,7 +10,10 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=23">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/login.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/responsive.css">
   <script>
     (function(){
       function setVH(){ document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px'); }
@@ -24,12 +27,13 @@
 
   <main class="login-page">
     <div class="login-brand">
-      <img class="login-brand__logo" src="./logo-ieteb.jpg.jpg" alt="IETEB" />
+      <img class="login-brand__logo" src="assets/images/logo-ieteb.jpg.jpg" alt="IETEB" />
     </div>
 
     <section class="login-card" aria-label="Login">
       <h1 class="login-card__title">Bem-vindo</h1>
-      <p class="login-card__subtitle">Entre com seu e-mail e senha para continuar.</p>
+      <p class="login-card__subtitle" id="loginCardSubtitle">Entre com seu e-mail e senha para continuar.</p>
+      <button id="btnResponderPesquisa" class="login-submit" type="button" style="display:none;">Responder pesquisa</button>
       <div class="login-error-summary" id="loginAuthError" aria-live="polite"></div>
       <div class="field-success" id="successMessage" aria-live="polite"></div>
 
@@ -54,11 +58,11 @@
         <div class="field-error" id="passwordError" aria-live="polite"></div>
 
         <!--<button class="login-submit" onclick="login()">Entrar</button>-->
-        <button class="login-submit" type="button">Entrar</button>
+        <button class="login-submit" id="loginSubmitBtn" type="button">Entrar</button>
 
-        <a class="login-link" href="#" onclick="return false;">Esqueci minha senha</a>
+        <a class="login-link" id="forgotPasswordLink" href="#" onclick="return false;">Esqueci minha senha</a>
         <!-- <a class="login-link" href="register.html">Cadastrar</a> -->
-        <a class="login-link" href="#" onclick="return false;">Cadastrar</a>
+        <a class="login-link" id="registerLink" href="#" onclick="return false;">Cadastrar</a>
 
       </div>
     </section>
@@ -72,7 +76,7 @@
 
   <div class="modal-overlay" id="successModal" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="successModalTitle">
-      <img class="modal__icon" src="Check.jpg.jpeg" alt="" aria-hidden="true" />
+      <img class="modal__icon" src="assets/images/Check.jpg.jpeg" alt="" aria-hidden="true" />
       <h2 class="modal__title" id="successModalTitle">Cadastro concluído</h2>
       <p class="modal__message" id="successModalMessage"></p>
       <button class="modal__action" id="successModalButton" type="button">Iniciar experiência</button>
@@ -82,7 +86,11 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-  <script src="app.js?v=30"></script>
+  <script src="scripts/firebase-config.js"></script>
+  <script src="scripts/utils.js"></script>
+  <script src="scripts/validation.js"></script>
+  <script src="scripts/auth.js"></script>
+  <script src="scripts/research.js"></script>
   <script>
     try {
       const pesquisaApp = firebase.apps.find(a => a.name === "pesquisa") ||
@@ -250,12 +258,104 @@
   <div id="popupObrigado" class="modal-overlay" style="display: none;">
     <div class="modal-box" id="modalBoxObrigado">
 
-      <img src="Check.jpg.jpeg" alt="" class="popup-check-img">
+      <img src="assets/images/Check.jpg.jpeg" alt="" class="popup-check-img">
 
       <h2>Obrigado por realizar a pesquisa!</h2>
 
       <button onclick="fecharTudo()">Fechar</button>
 
+    </div>
+  </div>
+
+  <div id="popupResponda" class="modal-overlay" style="display: none;">
+    <div class="modal-box">
+      <h2>Responda a pesquisa</h2>
+      <button onclick="fecharPopupResponda()">Entendi</button>
+    </div>
+  </div>
+
+  <div id="popupPlataforma" class="modal-overlay" style="display: none;">
+    <div class="modal-box">
+      <svg class="popup-hourglass" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="hglow" color-interpolation-filters="sRGB">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+
+        <!-- Top cap -->
+        <rect x="8" y="5" width="84" height="10" rx="5" fill="#1155cc" filter="url(#hglow)"/>
+        <rect x="8" y="5" width="84" height="10" rx="5" fill="#44aaff"/>
+        <!-- Bottom cap -->
+        <rect x="8" y="135" width="84" height="10" rx="5" fill="#1155cc" filter="url(#hglow)"/>
+        <rect x="8" y="135" width="84" height="10" rx="5" fill="#44aaff"/>
+
+        <!-- Top body -->
+        <path d="M12,15 L88,15 L53,72 L47,72 Z" fill="rgba(0,80,200,0.18)" stroke="#44aaff" stroke-width="2.5" filter="url(#hglow)"/>
+        <!-- Bottom body -->
+        <path d="M47,78 L53,78 L88,135 L12,135 Z" fill="rgba(0,80,200,0.18)" stroke="#44aaff" stroke-width="2.5" filter="url(#hglow)"/>
+
+        <!-- Sand draining from top -->
+        <polygon fill="rgba(20,100,255,0.38)" stroke="rgba(100,200,255,0.5)" stroke-width="0.5">
+          <animate attributeName="points"
+            values="16,15 84,15 53,72 47,72; 48,71 52,71 53,72 47,72; 16,15 84,15 53,72 47,72"
+            dur="2.8s" repeatCount="indefinite" calcMode="spline"
+            keySplines="0.4 0 0.6 1; 0 0 1 0"/>
+          <animate attributeName="opacity" values="1;0.08;0" keyTimes="0;0.75;0.88" dur="2.8s" repeatCount="indefinite"/>
+        </polygon>
+
+        <!-- Falling stream -->
+        <line x1="50" y1="72" x2="50" y2="72" stroke="#88ddff" stroke-width="2.5" stroke-linecap="round" filter="url(#hglow)">
+          <animate attributeName="y2" values="72;132;72" keyTimes="0;0.72;1" dur="2.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1; 0 0 1 0"/>
+          <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.05;0.65;0.82;1" dur="2.8s" repeatCount="indefinite"/>
+        </line>
+
+        <!-- Falling particles -->
+        <circle cx="50" cy="75" r="2" fill="#66ccff" filter="url(#hglow)">
+          <animate attributeName="cy" values="75;131;75" keyTimes="0;0.7;1" dur="2.8s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="1;0.8;0;0" keyTimes="0;0.65;0.78;1" dur="2.8s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="48" cy="79" r="1.5" fill="#44aaff" filter="url(#hglow)">
+          <animate attributeName="cy" values="79;131;79" keyTimes="0;0.7;1" dur="2.8s" begin="0.15s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="1;0.8;0;0" keyTimes="0;0.65;0.78;1" dur="2.8s" begin="0.15s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="52" cy="77" r="1.5" fill="#44aaff" filter="url(#hglow)">
+          <animate attributeName="cy" values="77;131;77" keyTimes="0;0.7;1" dur="2.8s" begin="0.3s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="1;0.8;0;0" keyTimes="0;0.65;0.78;1" dur="2.8s" begin="0.3s" repeatCount="indefinite"/>
+        </circle>
+
+        <!-- Sand filling bottom -->
+        <ellipse cx="50" cy="131" rx="1" ry="1" fill="rgba(30,100,255,0.5)" stroke="#44aaff" stroke-width="1" filter="url(#hglow)">
+          <animate attributeName="rx" values="1;30;1" keyTimes="0;0.75;1" dur="2.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.2 1; 0 0 1 0"/>
+          <animate attributeName="ry" values="0.5;5.5;0.5" keyTimes="0;0.75;1" dur="2.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.2 1; 0 0 1 0"/>
+          <animate attributeName="fill-opacity" values="0.5;0.55;0" keyTimes="0;0.75;0.9" dur="2.8s" repeatCount="indefinite"/>
+          <animate attributeName="stroke-opacity" values="1;1;0" keyTimes="0;0.75;0.9" dur="2.8s" repeatCount="indefinite"/>
+        </ellipse>
+
+        <!-- Ambient sparkles -->
+        <circle cx="25" cy="50" r="1.2" fill="#44aaff" opacity="0" filter="url(#hglow)">
+          <animate attributeName="opacity" values="0;0.9;0" dur="3.5s" begin="0.8s" repeatCount="indefinite"/>
+          <animate attributeName="cy" values="50;46;50" dur="3.5s" begin="0.8s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="75" cy="100" r="1" fill="#44aaff" opacity="0" filter="url(#hglow)">
+          <animate attributeName="opacity" values="0;0.9;0" dur="4s" begin="1.5s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="20" cy="110" r="1" fill="#66ccff" opacity="0" filter="url(#hglow)">
+          <animate attributeName="opacity" values="0;0.7;0" dur="3s" begin="2s" repeatCount="indefinite"/>
+          <animate attributeName="cx" values="20;22;20" dur="3s" begin="2s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="80" cy="35" r="0.8" fill="#66ccff" opacity="0" filter="url(#hglow)">
+          <animate attributeName="opacity" values="0;0.7;0" dur="2.5s" begin="1s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+
+      <h2>Sua plataforma de estudos da IETEB logo estará disponível!</h2>
+      <button onclick="fecharPopupPlataforma()">Fechar</button>
     </div>
   </div>
 
