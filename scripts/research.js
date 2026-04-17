@@ -46,19 +46,29 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   const nomeInput = document.getElementById("nomeCompleto");
+  const telefoneInput = document.getElementById("telefonePesquisa");
   const emailInput = document.getElementById("emailPesquisa");
 
   if (nomeInput) {
     nomeInput.addEventListener("input", function () {
-      const valor = this.value.trim();
+      this.value = this.value.replace(/[^a-zA-ZÀ-ÖØ-öø-ÿ\s]/g, "");
       const erroNome = document.getElementById("erroNome");
-      if (!valor) {
-        erroNome.textContent = "";
-      } else if (!valor.includes(" ")) {
-        erroNome.textContent = "Digite nome e sobrenome.";
-      } else {
-        erroNome.textContent = "";
-      }
+      const valor = this.value.trim();
+      erroNome.textContent = !valor ? "" : !valor.includes(" ") ? "Digite nome e sobrenome." : "";
+    });
+  }
+
+  if (telefoneInput) {
+    telefoneInput.addEventListener("input", function () {
+      const d = this.value.replace(/\D/g, "").slice(0, 11);
+      if (d.length === 0)       this.value = "";
+      else if (d.length <= 2)   this.value = `(${d}`;
+      else if (d.length <= 6)   this.value = `(${d.slice(0,2)}) ${d.slice(2)}`;
+      else if (d.length <= 10)  this.value = `(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`;
+      else                      this.value = `(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`;
+
+      const erroTelefone = document.getElementById("erroTelefone");
+      if (erroTelefone) erroTelefone.textContent = d.length >= 10 ? "" : d.length > 0 ? "Número incompleto." : "";
     });
   }
 
@@ -66,27 +76,24 @@ document.addEventListener("DOMContentLoaded", function () {
     emailInput.addEventListener("input", function () {
       const valor = this.value.trim();
       const erroEmail = document.getElementById("erroEmail");
-      if (!valor) {
-        erroEmail.textContent = "";
-      } else if (!valor.includes("@") || !valor.includes(".com")) {
-        erroEmail.textContent = "Digite um email válido.";
-      } else {
-        erroEmail.textContent = "";
-      }
+      erroEmail.textContent = !valor ? "" : (!valor.includes("@") || !valor.includes(".com")) ? "Digite um email válido." : "";
     });
   }
 
 });
 
 function validarPesquisa() {
-  const nome = document.getElementById("nomeCompleto").value.trim();
-  const email = document.getElementById("emailPesquisa").value.trim();
+  const nome     = document.getElementById("nomeCompleto").value.trim();
+  const telefone = document.getElementById("telefonePesquisa").value.trim();
+  const email    = document.getElementById("emailPesquisa").value.trim();
 
-  const erroNome = document.getElementById("erroNome");
-  const erroEmail = document.getElementById("erroEmail");
+  const erroNome     = document.getElementById("erroNome");
+  const erroTelefone = document.getElementById("erroTelefone");
+  const erroEmail    = document.getElementById("erroEmail");
 
   let valido = true;
   erroNome.textContent = "";
+  erroTelefone.textContent = "";
   erroEmail.textContent = "";
 
   if (!nome) {
@@ -94,6 +101,15 @@ function validarPesquisa() {
     valido = false;
   } else if (!nome.includes(" ")) {
     erroNome.textContent = "Digite nome e sobrenome.";
+    valido = false;
+  }
+
+  const digitos = telefone.replace(/\D/g, "");
+  if (!telefone) {
+    erroTelefone.textContent = "Campo obrigatório.";
+    valido = false;
+  } else if (digitos.length < 10) {
+    erroTelefone.textContent = "Número incompleto.";
     valido = false;
   }
 
@@ -307,14 +323,20 @@ function initSelectInteresse() {
         modalJaAberto = true;
         document.getElementById("researchModal").style.display = "none";
 
-        if (window.db) {
-          window.db.collection("pesquisas").add({
-            nome:        document.getElementById("nomeCompleto")?.value || "",
-            telefone:    document.getElementById("telefonePesquisa")?.value || "",
-            email:       document.getElementById("emailPesquisa")?.value || "",
-            interesse:   "nao",
-            respondidoEm: new Date().toISOString()
-          }).catch(err => console.error("Erro ao salvar resposta 'não':", err));
+        try {
+          const db = window.db ||
+            (firebase.apps.find(a => a.name === "pesquisa") || firebase.apps[0])?.firestore();
+          if (db) {
+            db.collection("pesquisas").add({
+              nome:         document.getElementById("nomeCompleto")?.value || "",
+              telefone:     document.getElementById("telefonePesquisa")?.value || "",
+              email:        document.getElementById("emailPesquisa")?.value || "",
+              interesse:    "nao",
+              respondidoEm: new Date().toISOString()
+            }).catch(err => console.error("Erro ao salvar 'não':", err));
+          }
+        } catch (e) {
+          console.error("Erro ao acessar Firestore:", e);
         }
 
         abrirObrigado();
