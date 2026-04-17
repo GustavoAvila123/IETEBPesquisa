@@ -2707,10 +2707,32 @@ function initSelectInteresse() {
   });
 }
 
-function finalizarFluxoPesquisa() {
+function coletarRespostas() {
+  const val = id => (document.getElementById(id) || {}).dataset?.value || "";
+  return {
+    nome:            document.getElementById("nomeCompleto")?.value || "",
+    email:           document.getElementById("emailPesquisa")?.value || "",
+    interesse:       val("selectInteresse"),
+    curso:           val("selectCurso"),
+    formato:         val("selectFormato"),
+    diasAoVivo:      val("selectDiasAoVivo"),
+    local:           val("selectLocal"),
+    regional:        val("selectRegional"),
+    diasPresencial:  val("selectDiasPresencial"),
+    respondidoEm:    new Date().toISOString()
+  };
+}
 
-  // 🔥 trava definitivamente
+function finalizarFluxoPesquisa() {
   localStorage.setItem("pesquisaRespondida", "true");
+
+  const respostas = coletarRespostas();
+
+  if (window.db) {
+    window.db.collection("pesquisas").add(respostas).catch(err => {
+      console.error("Erro ao salvar pesquisa:", err);
+    });
+  }
 
   document.getElementById("researchModal").style.display = "none";
 

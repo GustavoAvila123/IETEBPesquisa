@@ -11,6 +11,23 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=22">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAop69pcEdUQSwzVPFbC6s2kz-WP8xCpPg",
+      authDomain: "ieteb-197a7.firebaseapp.com",
+      projectId: "ieteb-197a7",
+      storageBucket: "ieteb-197a7.firebasestorage.app",
+      messagingSenderId: "316684215949",
+      appId: "1:316684215949:web:a6af5693ff1ee24569e4c4",
+      measurementId: "G-HL8PQ1JS79"
+    };
+    firebase.initializeApp(firebaseConfig);
+    window.db = firebase.firestore();
+  </script>
 </head>
 
 <body class="login-body">
