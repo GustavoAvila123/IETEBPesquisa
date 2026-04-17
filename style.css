@@ -1709,12 +1709,10 @@ body.register-body .church-picker {
 }
 
 .login-brand__logo {
-  width: 180px;
-  height: 180px;
-  position: relative;
+  width: clamp(80px, 18vh, 160px);
+  height: clamp(80px, 18vh, 160px);
   object-fit: contain;
   border-radius: 20px;
-  object-fit: contain;
 }
 
 @media (max-height: 620px) {
@@ -1867,11 +1865,15 @@ body.register-body .church-picker {
   inset: 0;
 
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 
-  overflow: auto;
-  /* 🔥 ESSENCIAL */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+
+  padding: max(20px, env(safe-area-inset-top)) 12px max(20px, env(safe-area-inset-bottom));
 }
 
 /* CAIXA */
@@ -1977,6 +1979,8 @@ body.register-body .church-picker {
   position: relative;
   width: 90%;
   max-width: 400px;
+  flex-shrink: 0;
+  margin: auto;
 
   overflow: visible;
 }
