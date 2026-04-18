@@ -34,6 +34,7 @@
       <h1 class="login-card__title">Bem-vindo</h1>
       <p class="login-card__subtitle" id="loginCardSubtitle">Entre com seu e-mail e senha para continuar.</p>
       <button id="btnResponderPesquisa" class="login-submit" type="button" style="display:none;">Responder pesquisa</button>
+      <button id="btnConhecaIETEB" class="btn-conheca" type="button" style="display:none;" onclick="abrirConhecaIETEB()">Conheça a IETEB</button>
       <div class="login-error-summary" id="loginAuthError" aria-live="polite"></div>
       <div class="field-success" id="successMessage" aria-live="polite"></div>
 
@@ -434,6 +435,26 @@
 
       <h2>Sua plataforma de estudos da IETEB logo estará disponível!</h2>
       <button onclick="fecharPopupPlataforma()">Fechar</button>
+    </div>
+  </div>
+
+  <div id="modalConhecaIETEB" class="modal-overlay" style="display:none;">
+    <div class="modal-box conheca-modal-box">
+      <button class="modal-close" onclick="fecharConhecaIETEB()">✕</button>
+
+      <h2 class="conheca-titulo">Sobre o IETEB</h2>
+
+      <div class="conheca-content">
+        <p>O IETEB – Centro Educacional Teológico é uma instituição dedicada à formação teológica, ministerial e educacional, com atuação voltada ao desenvolvimento bíblico, acadêmico e prático de seus alunos.</p>
+        <p>Com trajetória consolidada, o IETEB oferece programas de ensino que unem fundamento teológico, capacitação ministerial e preparação para o serviço cristão, buscando formar líderes, educadores e vocacionados com excelência.</p>
+        <p>Com sede em Osasco/SP e atuação interdenominacional, o IETEB promove ensino acessível, relevante e comprometido com princípios cristãos, contribuindo para a formação de pessoas preparadas para servir à Igreja e à sociedade.</p>
+
+        <p class="conheca-contato-titulo">Entre em contato conosco através dos canais de atendimento:</p>
+        <p class="conheca-contato-item">📞 (11) 3654-0799</p>
+        <p class="conheca-contato-item">📱 WhatsApp: (11) 9 5153-7312</p>
+      </div>
+
+      <button class="login-submit" onclick="fecharConhecaIETEB()">Obrigado!</button>
     </div>
   </div>
 

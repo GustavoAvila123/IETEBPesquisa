@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const answered = localStorage.getItem("pesquisaRespondida") === "true";
   const btnPesquisa = document.getElementById("btnResponderPesquisa");
-  const subtitleEl = document.getElementById("loginCardSubtitle");
+  const btnConheca  = document.getElementById("btnConhecaIETEB");
+  const subtitleEl  = document.getElementById("loginCardSubtitle");
 
   if (btnPesquisa) {
     btnPesquisa.style.display = answered ? "none" : "";
@@ -22,6 +23,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (subtitleEl) {
     subtitleEl.style.display = answered ? "" : "none";
+  }
+
+  if (btnConheca) {
+    btnConheca.style.display = answered ? "" : "none";
   }
 
   function mostrarFeedbackLogin() {
@@ -172,6 +177,16 @@ function abrirObrigado() {
   popup.classList.add("is-open");
 }
 
+function abrirConhecaIETEB() {
+  const modal = document.getElementById("modalConhecaIETEB");
+  if (modal) modal.style.display = "flex";
+}
+
+function fecharConhecaIETEB() {
+  const modal = document.getElementById("modalConhecaIETEB");
+  if (modal) modal.style.display = "none";
+}
+
 function fecharPopupResponda() {
   const popup = document.getElementById("popupResponda");
   if (popup) popup.style.display = "none";
@@ -192,6 +207,8 @@ function fecharTudo() {
     if (btn) btn.style.display = "none";
     const subtitle = document.getElementById("loginCardSubtitle");
     if (subtitle) subtitle.style.display = "";
+    const btnConheca = document.getElementById("btnConhecaIETEB");
+    if (btnConheca) btnConheca.style.display = "";
   } else {
     modalJaAberto = false;
   }
