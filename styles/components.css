@@ -466,6 +466,10 @@
   color: #cfe3ff;
 }
 
+#etapaPerguntas > label {
+  margin-bottom: 8px;
+}
+
 #perguntaCurso {
   opacity: 0;
   transform: translateY(10px);
