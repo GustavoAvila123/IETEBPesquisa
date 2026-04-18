@@ -87,14 +87,16 @@ body.register-body .church-picker {
 }
 
 .login-brand__logo {
-  width: clamp(120px, 18vh, 180px);
-  height: clamp(120px, 18vh, 180px);
-  object-fit: cover;
-  object-position: top;
+  width: clamp(80px, 18vh, 160px);
+  height: clamp(80px, 18vh, 160px);
+  max-width: min(40vw, 160px);
+  max-height: min(40vw, 160px);
+  object-fit: contain;
   border-radius: 18px;
   transform: none;
   filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.7));
   background: none;
+  flex-shrink: 0;
 }
 
 .login-brand__mark {
@@ -507,15 +509,8 @@ body.register-body .church-picker {
   box-shadow: 0 0 0 3px rgba(255, 90, 90, 0.18);
 }
 
-/* ─ override: reset login-brand duplicated block ─ */
+/* ─ login-brand baseline ─ */
 .login-brand {
   min-height: 0;
   margin-bottom: 12px;
-}
-
-.login-brand__logo {
-  width: clamp(80px, 18vh, 160px);
-  height: clamp(80px, 18vh, 160px);
-  object-fit: contain;
-  border-radius: 20px;
 }
