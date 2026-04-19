@@ -86,3 +86,14 @@ function unlockPageScroll() {
     window.scrollTo(0, scrollY);
   }
 }
+
+function sanitizeEmailField(el) {
+  const pos = el.selectionStart;
+  const sanitized = el.value
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+  if (el.value !== sanitized) {
+    el.value = sanitized;
+    try { el.setSelectionRange(pos, pos); } catch (_) {}
+  }
+}

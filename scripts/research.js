@@ -79,6 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (emailInput) {
     emailInput.addEventListener("input", function () {
+      sanitizeEmailField(this);
       const valor = this.value.trim();
       const erroEmail = document.getElementById("erroEmail");
       erroEmail.textContent = !valor ? "" : (!valor.includes("@") || !valor.includes(".com")) ? "Digite um email válido." : "";

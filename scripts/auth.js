@@ -94,6 +94,7 @@ function attachLiveValidation() {
   const passEl = document.getElementById("password");
   if (emailEl) {
     emailEl.addEventListener("input", () => {
+      sanitizeEmailField(emailEl);
       setFieldError("loginAuthError", "");
       setFieldError("emailError", validateEmail(emailEl.value));
     });
@@ -329,6 +330,7 @@ function attachRegisterLiveValidation() {
 
   if (emailEl) {
     emailEl.addEventListener("input", () => {
+      sanitizeEmailField(emailEl);
       setFieldError("registerEmailError", validateEmail(emailEl.value));
       updateRegisterSubmitState();
     });
