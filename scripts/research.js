@@ -215,7 +215,10 @@ function _typewriterCursos() {
 
 function abrirExplorarCursos() {
   const modal = document.getElementById("modalExplorarCursos");
-  if (modal) modal.style.display = "flex";
+  if (!modal) return;
+  modal.style.display = "flex";
+  const box = modal.querySelector(".modal-box");
+  if (box) box.scrollTop = 0;
   clearTimeout(_timerFrase);
   _charIdx = 0; _apagando = false;
   _typewriterCursos();
