@@ -133,6 +133,8 @@ function validarPesquisa() {
 }
 
 function fecharModal() {
+  closePickerModal();
+
   const modal = document.getElementById("researchModal");
   if (modal) modal.style.display = "none";
 
@@ -274,54 +276,85 @@ function resetFrom(perguntaIds, selectIds) {
   if (btn) btn.style.display = "none";
 }
 
+let _activePickerModal = null;
+
+function openPickerModal(selectEl, onSelect) {
+  if (_activePickerModal) closePickerModal();
+
+  const label = selectEl.parentElement.querySelector("label")?.textContent || "";
+  const options = Array.from(selectEl.querySelectorAll(".custom-select__options div"));
+  const selected = selectEl.querySelector(".custom-select__selected");
+
+  const backdrop = document.createElement("div");
+  backdrop.className = "picker-modal-backdrop";
+
+  const box = document.createElement("div");
+  box.className = "picker-modal-box";
+
+  const closeBtn = document.createElement("button");
+  closeBtn.className = "picker-modal-close";
+  closeBtn.type = "button";
+  closeBtn.innerHTML = "&times;";
+  closeBtn.addEventListener("click", closePickerModal);
+
+  const titleEl = document.createElement("div");
+  titleEl.className = "picker-modal-title";
+  titleEl.textContent = label;
+
+  const optionsEl = document.createElement("div");
+  optionsEl.className = "picker-modal-options";
+  if (options.length >= 9) optionsEl.classList.add("three-col");
+  else if (options.length >= 5) optionsEl.classList.add("two-col");
+
+  options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.className = "picker-modal-option";
+    btn.type = "button";
+    btn.textContent = opt.textContent;
+    btn.addEventListener("click", () => {
+      selected.textContent = opt.textContent;
+      selectEl.dataset.value = opt.dataset.value;
+      closePickerModal();
+      if (onSelect) onSelect(opt.dataset.value);
+    });
+    optionsEl.appendChild(btn);
+  });
+
+  box.appendChild(closeBtn);
+  box.appendChild(titleEl);
+  box.appendChild(optionsEl);
+  backdrop.appendChild(box);
+  document.body.appendChild(backdrop);
+  _activePickerModal = backdrop;
+  lockPageScroll();
+}
+
+function closePickerModal() {
+  if (!_activePickerModal) return;
+  _activePickerModal.remove();
+  _activePickerModal = null;
+  unlockPageScroll();
+}
+
 function initCustomSelect(id, onSelect) {
   const select = document.getElementById(id);
   if (!select) return;
   const selected = select.querySelector(".custom-select__selected");
-  const options = select.querySelector(".custom-select__options");
 
   selected.addEventListener("click", function (e) {
     e.stopPropagation();
-    document.querySelectorAll(".custom-select").forEach(s => {
-      if (s !== select) s.classList.remove("open");
-    });
-    select.classList.toggle("open");
-  });
-
-  options.querySelectorAll("div").forEach(option => {
-    option.addEventListener("click", function (e) {
-      e.stopPropagation();
-      selected.textContent = this.textContent;
-      select.dataset.value = this.dataset.value;
-      select.classList.remove("open");
-      if (onSelect) onSelect(this.dataset.value);
-    });
+    openPickerModal(select, onSelect);
   });
 }
 
 function initSelectInteresse() {
   const select = document.getElementById("selectInteresse");
   if (!select) return;
-
   const selected = select.querySelector(".custom-select__selected");
-  const options = select.querySelector(".custom-select__options");
 
   selected.addEventListener("click", (e) => {
     e.stopPropagation();
-    document.querySelectorAll(".custom-select").forEach(s => {
-      if (s !== select) s.classList.remove("open");
-    });
-    select.classList.toggle("open");
-  });
-
-  options.querySelectorAll("div").forEach(opt => {
-    opt.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const value = opt.dataset.value;
-      selected.textContent = opt.textContent;
-      select.classList.remove("open");
-      select.dataset.value = value;
-
+    openPickerModal(select, (value) => {
       const pergunta = document.getElementById("perguntaCurso");
       if (!pergunta) return;
 
@@ -359,14 +392,6 @@ function initSelectInteresse() {
         abrirObrigado();
       }
     });
-  });
-
-  document.addEventListener("click", () => {
-    select.classList.remove("open");
-  });
-
-  select.addEventListener("click", function (e) {
-    e.stopPropagation();
   });
 }
 

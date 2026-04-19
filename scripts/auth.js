@@ -358,6 +358,26 @@ function attachRegisterLiveValidation() {
   updateRegisterSubmitState();
 }
 
+function addPickerPanelHeader(panel, title, closeFn) {
+  if (panel.querySelector(".church-picker__header")) return;
+  const header = document.createElement("div");
+  header.className = "church-picker__header";
+
+  const titleEl = document.createElement("span");
+  titleEl.className = "church-picker__picker-title";
+  titleEl.textContent = title;
+
+  const closeBtn = document.createElement("button");
+  closeBtn.type = "button";
+  closeBtn.className = "church-picker__close-btn";
+  closeBtn.innerHTML = "&times;";
+  closeBtn.addEventListener("click", closeFn);
+
+  header.appendChild(titleEl);
+  header.appendChild(closeBtn);
+  panel.insertBefore(header, panel.firstChild);
+}
+
 function initChurchPicker() {
   const hidden = document.getElementById("church");
   const button = document.getElementById("churchPickerButton");
@@ -404,16 +424,12 @@ function initChurchPicker() {
     }
   };
 
+  addPickerPanelHeader(panel, "Selecione sua igreja", close);
+
   button.addEventListener("click", () => {
     if (overlay.classList.contains("is-open")) close();
     else open();
   });
-
-  if (!isRegisterPage) {
-    overlay.addEventListener("click", (e) => {
-      if (e.target === overlay) close();
-    });
-  }
 
   overlay.addEventListener("touchmove", (e) => {
     if (e.target === overlay) e.preventDefault();
@@ -432,16 +448,6 @@ function initChurchPicker() {
       close();
     });
   });
-
-  if (!isRegisterPage) {
-    document.addEventListener("keydown", (e) => {
-      if (!overlay.classList.contains("is-open")) return;
-      if (e.key === "Escape") {
-        e.preventDefault();
-        close();
-      }
-    });
-  }
 }
 
 function initSimplePicker(hiddenId, buttonId, labelId, overlayId, emptyLabel) {
@@ -492,16 +498,12 @@ function initSimplePicker(hiddenId, buttonId, labelId, overlayId, emptyLabel) {
     }
   };
 
+  addPickerPanelHeader(panel, emptyLabel, close);
+
   button.addEventListener("click", () => {
     if (overlay.classList.contains("is-open")) close();
     else open();
   });
-
-  if (!isRegisterPage) {
-    overlay.addEventListener("click", (e) => {
-      if (e.target === overlay) close();
-    });
-  }
 
   overlay.addEventListener("touchmove", (e) => {
     if (e.target === overlay) e.preventDefault();
