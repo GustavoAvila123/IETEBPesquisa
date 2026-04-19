@@ -12,7 +12,7 @@
     margin-bottom: 8px;
   }
 
-  .login-brand__logo {
+  .login-brand__logo-wrap {
     width: clamp(104px, 16vh, 156px);
     height: clamp(104px, 16vh, 156px);
   }
@@ -81,10 +81,10 @@
     margin-bottom: 8px;
   }
 
-  .login-brand__logo {
+  .login-brand__logo-wrap {
     width: clamp(110px, 17vh, 160px);
     height: clamp(110px, 17vh, 160px);
-    border-radius: 16px;
+    border-radius: 22%;
   }
 
   .login-card {
@@ -122,7 +122,7 @@
     margin-bottom: 8px;
   }
 
-  .login-brand__logo {
+  .login-brand__logo-wrap {
     width: clamp(88px, 14vh, 124px);
     height: clamp(88px, 14vh, 124px);
   }
@@ -197,10 +197,10 @@
     margin-bottom: 8px;
   }
 
-  .login-brand__logo {
+  .login-brand__logo-wrap {
     width: clamp(88px, 14vh, 124px);
     height: clamp(88px, 14vh, 124px);
-    border-radius: 14px;
+    border-radius: 22%;
   }
 
   .login-card {
@@ -257,10 +257,10 @@
     margin-bottom: 4px;
   }
 
-  .login-brand__logo {
+  .login-brand__logo-wrap {
     width: clamp(60px, 11vh, 80px);
     height: clamp(60px, 11vh, 80px);
-    border-radius: 12px;
+    border-radius: 22%;
   }
 
   .login-card {
@@ -397,7 +397,7 @@
     margin-bottom: 6px;
   }
 
-  .login-brand__logo {
+  .login-brand__logo-wrap {
     width: clamp(72px, 20vw, 96px);
     height: clamp(72px, 20vw, 96px);
     max-width: 96px;
@@ -428,7 +428,7 @@
 }
 
 @media (max-width: 360px) {
-  .login-brand__logo {
+  .login-brand__logo-wrap {
     width: 72px;
     height: 72px;
     max-width: 72px;
@@ -456,11 +456,11 @@
     padding: 18px 14px 16px;
   }
 
-  .login-brand__logo {
+  .login-brand__logo-wrap {
     width: 150px;
     height: 150px;
-    border-radius: 20px;
-    object-fit: contain;
+    border-radius: 22%;
+    object-fit: cover;
   }
 
   .login-footer {
