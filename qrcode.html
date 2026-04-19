@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR Code — IETEB Pesquisa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      background: linear-gradient(180deg, #0b1f5c 0%, #081633 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      gap: 28px;
+      color: #fff;
+    }
+
+    h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #cfe3ff;
+      letter-spacing: 0.04em;
+      text-align: center;
+    }
+
+    .qr-wrapper {
+      background: #fff;
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #qrCanvas {
+      display: block;
+      border-radius: 8px;
+    }
+
+    .url-badge {
+      background: rgba(0, 153, 255, 0.15);
+      border: 1px solid rgba(0, 153, 255, 0.4);
+      border-radius: 20px;
+      padding: 8px 20px;
+      font-size: 13px;
+      color: #7dd3fc;
+      text-align: center;
+      word-break: break-all;
+    }
+
+    .btn-download {
+      padding: 12px 32px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #0099ff, #0055cc);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-download:hover { opacity: 0.85; }
+
+    .note {
+      font-size: 12px;
+      color: #64748b;
+      text-align: center;
+      max-width: 340px;
+      line-height: 1.6;
+    }
+    .note a { color: #7dd3fc; }
+  </style>
+</head>
+<body>
+
+  <h1>QR Code — IETEB Pesquisa</h1>
+
+  <div class="qr-wrapper">
+    <canvas id="qrCanvas"></canvas>
+  </div>
+
+  <div class="url-badge" id="urlBadge"></div>
+
+  <button class="btn-download" onclick="baixarQR()">⬇ Baixar QR Code (PNG)</button>
+
+  <p class="note">
+    Para exibir uma URL personalizada (ex: <strong>ietebpesquisa.com.br</strong>), registre
+    um domínio e configure-o como domínio customizado no GitHub Pages.
+    O QR Code será atualizado automaticamente.
+  </p>
+
+  <script>
+    const URL_DESTINO = "https://gustavoavila123.github.io/IETEBPesquisa/";
+    const TAMANHO = 400;
+    const LOGO_RATIO = 0.22;
+
+    document.getElementById("urlBadge").textContent = URL_DESTINO;
+
+    const canvas = document.getElementById("qrCanvas");
+
+    QRCode.toCanvas(canvas, URL_DESTINO, {
+      errorCorrectionLevel: "H",
+      width: TAMANHO,
+      margin: 2,
+      color: { dark: "#0b1f5c", light: "#ffffff" }
+    }, function (err) {
+      if (err) { console.error(err); return; }
+      sobreporLogo(canvas);
+    });
+
+    function sobreporLogo(cv) {
+      const ctx = cv.getContext("2d");
+      const s   = cv.width;
+      const ls  = Math.round(s * LOGO_RATIO);
+      const lx  = Math.round((s - ls) / 2);
+      const ly  = Math.round((s - ls) / 2);
+      const r   = Math.round(ls * 0.18);
+
+      /* fundo branco com borda arredondada */
+      const pad = 7;
+      ctx.fillStyle = "#ffffff";
+      retArredondado(ctx, lx - pad, ly - pad, ls + pad * 2, ls + pad * 2, r + 4);
+      ctx.fill();
+
+      /* bloco azul do logo */
+      ctx.fillStyle = "#1a3a8f";
+      retArredondado(ctx, lx, ly, ls, ls, r);
+      ctx.fill();
+
+      /* texto IETEB */
+      const fontSize = Math.round(ls * 0.30);
+      ctx.fillStyle   = "#ffffff";
+      ctx.font        = `700 ${fontSize}px Inter, sans-serif`;
+      ctx.textAlign   = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("IETEB", s / 2, s / 2);
+    }
+
+    function retArredondado(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
+    function baixarQR() {
+      const link = document.createElement("a");
+      link.download = "qrcode-ieteb.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+  </script>
+</body>
+</html>
