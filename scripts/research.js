@@ -179,6 +179,16 @@ function abrirObrigado() {
   popup.classList.add("is-open");
 }
 
+function abrirExplorarCursos() {
+  const modal = document.getElementById("modalExplorarCursos");
+  if (modal) modal.style.display = "flex";
+}
+
+function fecharExplorarCursos() {
+  const modal = document.getElementById("modalExplorarCursos");
+  if (modal) modal.style.display = "none";
+}
+
 function abrirConhecaIETEB() {
   const modal = document.getElementById("modalConhecaIETEB");
   if (modal) modal.style.display = "flex";

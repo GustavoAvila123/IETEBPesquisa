@@ -309,6 +309,30 @@
   text-align: justify;
 }
 
+.cursos-content {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.curso-item {
+  border-left: 3px solid rgba(0, 153, 255, 0.5);
+  padding-left: 12px;
+}
+
+.curso-nome {
+  font-size: 14px;
+  font-weight: 700;
+  color: #7dd3fc;
+  margin-bottom: 6px;
+}
+
+.curso-sigla {
+  font-size: 12px;
+  font-weight: 400;
+  color: #94b8ff;
+}
+
 .conheca-contato-titulo {
   font-weight: 700;
   color: #e2edff !important;

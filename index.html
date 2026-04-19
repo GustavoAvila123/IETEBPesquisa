@@ -35,6 +35,7 @@
       <p class="login-card__subtitle" id="loginCardSubtitle">Entre com seu e-mail e senha para continuar.</p>
       <button id="btnResponderPesquisa" class="login-submit" type="button" style="display:none;">Responder pesquisa</button>
       <button id="btnConhecaIETEB" class="btn-conheca" type="button" style="display:none;" onclick="abrirConhecaIETEB()">Conheça a IETEB</button>
+      <button id="btnExplorarCursos" class="btn-conheca" type="button" onclick="abrirExplorarCursos()">Explore nossos cursos</button>
       <div class="login-error-summary" id="loginAuthError" aria-live="polite"></div>
       <div class="field-success" id="successMessage" aria-live="polite"></div>
 
@@ -435,6 +436,41 @@
 
       <h2>Sua plataforma de estudos da IETEB logo estará disponível!</h2>
       <button onclick="fecharPopupPlataforma()">Entendi</button>
+    </div>
+  </div>
+
+  <!-- MODAL EXPLORE NOSSOS CURSOS -->
+  <div id="modalExplorarCursos" class="modal-overlay" style="display:none;">
+    <div class="modal-box conheca-modal-box">
+      <button class="modal-close" onclick="fecharExplorarCursos()">✕</button>
+
+      <h2 class="conheca-titulo">Explore nossos cursos</h2>
+
+      <div class="conheca-content cursos-content">
+
+        <div class="curso-item">
+          <h3 class="curso-nome">Bacharel em Teologia</h3>
+          <p>Você irá aprender teologia de forma mais aprofundada, estudando Bíblia, doutrinas, história da Igreja, liderança, pregação, aconselhamento e preparo ministerial. Ideal para quem deseja formação mais completa para servir no ministério e no ensino.</p>
+        </div>
+
+        <div class="curso-item">
+          <h3 class="curso-nome">Básico em Teologia</h3>
+          <p>Você irá aprender os fundamentos da fé cristã, conhecimento bíblico, introdução à teologia, princípios doutrinários e desenvolvimento espiritual. Ideal para quem quer começar a estudar teologia.</p>
+        </div>
+
+        <div class="curso-item">
+          <h3 class="curso-nome">Capacitação de Professor</h3>
+          <p>Você irá aprender princípios de ensino bíblico, didática, preparo de aulas, métodos pedagógicos e como ensinar com clareza em escola bíblica, discipulado e formação cristã.</p>
+        </div>
+
+        <div class="curso-item">
+          <h3 class="curso-nome">CFAM <span class="curso-sigla">(Curso de Formação e Aperfeiçoamento Ministerial)</span></h3>
+          <p>Você irá aprender sobre prática ministerial, liderança cristã, pregação, missões, cuidado pastoral e aperfeiçoamento para atuar no ministério.</p>
+        </div>
+
+      </div>
+
+      <button class="login-submit" onclick="fecharExplorarCursos()">Obrigado!</button>
     </div>
   </div>
 
