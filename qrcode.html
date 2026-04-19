@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>QR Code — IETEB Pesquisa</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -76,7 +76,6 @@
       max-width: 340px;
       line-height: 1.6;
     }
-    .note a { color: #7dd3fc; }
   </style>
 </head>
 <body>
@@ -94,67 +93,90 @@
   <p class="note">
     Para exibir uma URL personalizada (ex: <strong>ietebpesquisa.com.br</strong>), registre
     um domínio e configure-o como domínio customizado no GitHub Pages.
-    O QR Code será atualizado automaticamente.
   </p>
 
   <script>
     const URL_DESTINO = "https://gustavoavila123.github.io/IETEBPesquisa/";
-    const TAMANHO = 400;
-    const LOGO_RATIO = 0.22;
+    const TAMANHO     = 400;
+    const LOGO_RATIO  = 0.22;
 
     document.getElementById("urlBadge").textContent = URL_DESTINO;
 
+    /* ── Gerar QR com qrcode-generator ── */
+    const qr = qrcode(0, "H");   // tipo 0 = auto, correção H = 30%
+    qr.addData(URL_DESTINO);
+    qr.make();
+
     const canvas = document.getElementById("qrCanvas");
+    canvas.width  = TAMANHO;
+    canvas.height = TAMANHO;
+    const ctx = canvas.getContext("2d");
 
-    QRCode.toCanvas(canvas, URL_DESTINO, {
-      errorCorrectionLevel: "H",
-      width: TAMANHO,
-      margin: 2,
-      color: { dark: "#0b1f5c", light: "#ffffff" }
-    }, function (err) {
-      if (err) { console.error(err); return; }
-      sobreporLogo(canvas);
-    });
+    const mods      = qr.getModuleCount();
+    const quietZone = 3;
+    const cellSize  = TAMANHO / (mods + quietZone * 2);
+    const offset    = quietZone * cellSize;
 
-    function sobreporLogo(cv) {
-      const ctx = cv.getContext("2d");
-      const s   = cv.width;
+    /* fundo branco */
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, TAMANHO, TAMANHO);
+
+    /* módulos azuis */
+    ctx.fillStyle = "#0b1f5c";
+    for (let row = 0; row < mods; row++) {
+      for (let col = 0; col < mods; col++) {
+        if (qr.isDark(row, col)) {
+          ctx.fillRect(
+            offset + col * cellSize,
+            offset + row * cellSize,
+            cellSize,
+            cellSize
+          );
+        }
+      }
+    }
+
+    /* ── Logo IETEB no centro ── */
+    sobreporLogo();
+
+    function sobreporLogo() {
+      const s   = TAMANHO;
       const ls  = Math.round(s * LOGO_RATIO);
       const lx  = Math.round((s - ls) / 2);
       const ly  = Math.round((s - ls) / 2);
       const r   = Math.round(ls * 0.18);
+      const pad = 8;
 
-      /* fundo branco com borda arredondada */
-      const pad = 7;
+      /* halo branco */
       ctx.fillStyle = "#ffffff";
-      retArredondado(ctx, lx - pad, ly - pad, ls + pad * 2, ls + pad * 2, r + 4);
+      retArredondado(lx - pad, ly - pad, ls + pad * 2, ls + pad * 2, r + 5);
       ctx.fill();
 
-      /* bloco azul do logo */
+      /* bloco azul */
       ctx.fillStyle = "#1a3a8f";
-      retArredondado(ctx, lx, ly, ls, ls, r);
+      retArredondado(lx, ly, ls, ls, r);
       ctx.fill();
 
       /* texto IETEB */
       const fontSize = Math.round(ls * 0.30);
-      ctx.fillStyle   = "#ffffff";
-      ctx.font        = `700 ${fontSize}px Inter, sans-serif`;
-      ctx.textAlign   = "center";
+      ctx.fillStyle    = "#ffffff";
+      ctx.font         = `700 ${fontSize}px Inter, sans-serif`;
+      ctx.textAlign    = "center";
       ctx.textBaseline = "middle";
       ctx.fillText("IETEB", s / 2, s / 2);
     }
 
-    function retArredondado(ctx, x, y, w, h, r) {
+    function retArredondado(x, y, w, h, r) {
       ctx.beginPath();
       ctx.moveTo(x + r, y);
       ctx.lineTo(x + w - r, y);
-      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.quadraticCurveTo(x + w, y,     x + w, y + r);
       ctx.lineTo(x + w, y + h - r);
       ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
       ctx.lineTo(x + r, y + h);
-      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.quadraticCurveTo(x, y + h,     x, y + h - r);
       ctx.lineTo(x, y + r);
-      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.quadraticCurveTo(x, y,         x + r, y);
       ctx.closePath();
     }
 
