@@ -477,7 +477,7 @@
       renderChart("chartRegional",       "bar",      Object.keys(reg), Object.values(reg), LABELS.regional);
       renderChart("chartInteresse",      "doughnut", Object.keys(int), Object.values(int), { sim: "Sim — Tem interesse", nao: "Não — Sem interesse" });
 
-      renderTabela(docs);
+      renderTabela(docs.filter(d => d.interesse !== "nao"));
     }
 
     function iniciarDashboard() {
