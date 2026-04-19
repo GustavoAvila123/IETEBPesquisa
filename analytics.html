@@ -142,7 +142,25 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
-    #filtroCurso {
+    .filtros {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .filtro-grupo {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .filtro-grupo label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #7dd3fc;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    #filtroCurso, #filtroRegional {
       padding: 6px 14px;
       border-radius: 8px;
       border: 1px solid rgba(0,153,255,0.4);
@@ -152,7 +170,7 @@
       cursor: pointer;
       outline: none;
     }
-    #filtroCurso option { background: #0b1f5c; }
+    #filtroCurso option, #filtroRegional option { background: #0b1f5c; }
 
     table {
       width: 100%;
@@ -224,13 +242,36 @@
     <div class="table-card">
       <div class="table-header">
         <h3>Todas as Respostas</h3>
-        <select id="filtroCurso">
-          <option value="">Todos os cursos</option>
-          <option value="bacharel">Bacharel em Teologia</option>
-          <option value="basico">Básico em Teologia</option>
-          <option value="professor">Cap. de Professor</option>
-          <option value="cfam">CFAM</option>
-        </select>
+        <div class="filtros">
+          <div class="filtro-grupo">
+            <label>Curso</label>
+            <select id="filtroCurso">
+              <option value="">Todos os cursos</option>
+              <option value="bacharel">Bacharel em Teologia</option>
+              <option value="basico">Básico em Teologia</option>
+              <option value="professor">Cap. de Professor</option>
+              <option value="cfam">CFAM</option>
+            </select>
+          </div>
+          <div class="filtro-grupo">
+            <label>Regional</label>
+            <select id="filtroRegional">
+              <option value="">Todas</option>
+              <option value="nao-sei">Não sei</option>
+              <option value="1">Regional 1</option>
+              <option value="2">Regional 2</option>
+              <option value="3">Regional 3</option>
+              <option value="4">Regional 4</option>
+              <option value="5">Regional 5</option>
+              <option value="6">Regional 6</option>
+              <option value="7">Regional 7</option>
+              <option value="8">Regional 8</option>
+              <option value="9">Regional 9</option>
+              <option value="10">Regional 10</option>
+              <option value="sede">Igreja Sede</option>
+            </select>
+          </div>
+        </div>
       </div>
       <table>
         <thead>
@@ -314,8 +355,20 @@
     }
 
     function getFilteredDocs() {
-      const curso = document.getElementById("filtroCurso")?.value || "";
-      return curso ? allDocs.filter(d => d.curso === curso) : allDocs;
+      const curso    = document.getElementById("filtroCurso")?.value    || "";
+      const regional = document.getElementById("filtroRegional")?.value || "";
+
+      return allDocs.filter(d => {
+        if (curso && d.curso !== curso) return false;
+        if (regional) {
+          if (regional === "sede") {
+            if (d.local !== "sede") return false;
+          } else {
+            if (d.regional !== regional) return false;
+          }
+        }
+        return true;
+      });
     }
 
     function renderChart(id, tipo, keys, dados, labelMap) {
@@ -396,9 +449,10 @@
     }
 
     function atualizarDashboard(docs) {
-      const total = allDocs.length;
+      const total    = allDocs.length;
       const filtrado = docs.length;
-      const filtroAtivo = document.getElementById("filtroCurso")?.value;
+      const filtroAtivo = document.getElementById("filtroCurso")?.value ||
+                          document.getElementById("filtroRegional")?.value;
       document.getElementById("totalBadge").textContent =
         filtroAtivo ? `${filtrado} de ${total} respostas` : `${total} resposta${total !== 1 ? "s" : ""}`;
 
@@ -421,6 +475,9 @@
 
     function iniciarDashboard() {
       document.getElementById("filtroCurso").addEventListener("change", () => {
+        atualizarDashboard(getFilteredDocs());
+      });
+      document.getElementById("filtroRegional").addEventListener("change", () => {
         atualizarDashboard(getFilteredDocs());
       });
 
