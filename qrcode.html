@@ -181,9 +181,34 @@
     }
 
     function baixarQR() {
+      const titulo    = "IETEB Pesquisa";
+      const fontSize  = 28;
+      const paddingV  = 24;
+      const alturaExtra = fontSize + paddingV * 2;
+
+      const cv2 = document.createElement("canvas");
+      cv2.width  = TAMANHO;
+      cv2.height = TAMANHO + alturaExtra;
+
+      const c = cv2.getContext("2d");
+
+      /* fundo azul escuro no topo */
+      c.fillStyle = "#0b1f5c";
+      c.fillRect(0, 0, cv2.width, alturaExtra);
+
+      /* título */
+      c.fillStyle    = "#cfe3ff";
+      c.font         = `700 ${fontSize}px Inter, sans-serif`;
+      c.textAlign    = "center";
+      c.textBaseline = "middle";
+      c.fillText(titulo, TAMANHO / 2, alturaExtra / 2);
+
+      /* QR code abaixo */
+      c.drawImage(canvas, 0, alturaExtra);
+
       const link = document.createElement("a");
       link.download = "qrcode-ieteb.png";
-      link.href = canvas.toDataURL("image/png");
+      link.href = cv2.toDataURL("image/png");
       link.click();
     }
   </script>
