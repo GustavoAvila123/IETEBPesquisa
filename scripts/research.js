@@ -179,14 +179,54 @@ function abrirObrigado() {
   popup.classList.add("is-open");
 }
 
+const _FRASES_CURSOS = [
+  "Desperte seu chamado.",
+  "Aprofunde sua fé.",
+  "Forme-se para servir.",
+  "Ensine com excelência.",
+  "Comece hoje."
+];
+let _fraseIdx = 0, _charIdx = 0, _apagando = false, _timerFrase = null;
+
+function _typewriterCursos() {
+  const el = document.getElementById("cursosFrase");
+  if (!el) return;
+  const frase = _FRASES_CURSOS[_fraseIdx];
+
+  if (!_apagando) {
+    el.textContent = frase.slice(0, ++_charIdx);
+    if (_charIdx === frase.length) {
+      _apagando = true;
+      _timerFrase = setTimeout(_typewriterCursos, 1600);
+    } else {
+      _timerFrase = setTimeout(_typewriterCursos, 60);
+    }
+  } else {
+    el.textContent = frase.slice(0, --_charIdx);
+    if (_charIdx === 0) {
+      _apagando = false;
+      _fraseIdx = (_fraseIdx + 1) % _FRASES_CURSOS.length;
+      _timerFrase = setTimeout(_typewriterCursos, 300);
+    } else {
+      _timerFrase = setTimeout(_typewriterCursos, 35);
+    }
+  }
+}
+
 function abrirExplorarCursos() {
   const modal = document.getElementById("modalExplorarCursos");
   if (modal) modal.style.display = "flex";
+  clearTimeout(_timerFrase);
+  _charIdx = 0; _apagando = false;
+  _typewriterCursos();
 }
 
 function fecharExplorarCursos() {
   const modal = document.getElementById("modalExplorarCursos");
   if (modal) modal.style.display = "none";
+  clearTimeout(_timerFrase);
+  const el = document.getElementById("cursosFrase");
+  if (el) el.textContent = "";
 }
 
 function abrirConhecaIETEB() {
