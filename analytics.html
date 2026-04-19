@@ -237,6 +237,10 @@
         <h3>Regional</h3>
         <div class="chart-wrap"><canvas id="chartRegional"></canvas></div>
       </div>
+      <div class="card">
+        <h3>Interesse em Estudar</h3>
+        <div class="chart-wrap"><canvas id="chartInteresse"></canvas></div>
+      </div>
     </div>
 
     <div class="table-card">
@@ -463,12 +467,15 @@
       const dpr = contar(docs, "diasPresencial");
       const reg = contar(docs, "regional");
 
+      const int = contar(docs, "interesse");
+
       renderChart("chartCurso",          "doughnut", Object.keys(cur), Object.values(cur), LABELS.curso);
       renderChart("chartFormato",        "bar",      Object.keys(fmt), Object.values(fmt), LABELS.formato);
       renderChart("chartLocal",          "doughnut", Object.keys(loc), Object.values(loc), LABELS.local);
       renderChart("chartDiasAoVivo",     "bar",      Object.keys(dav), Object.values(dav), LABELS.dias);
       renderChart("chartDiasPresencial", "bar",      Object.keys(dpr), Object.values(dpr), LABELS.dias);
       renderChart("chartRegional",       "bar",      Object.keys(reg), Object.values(reg), LABELS.regional);
+      renderChart("chartInteresse",      "doughnut", Object.keys(int), Object.values(int), { sim: "Sim — Tem interesse", nao: "Não — Sem interesse" });
 
       renderTabela(docs);
     }
