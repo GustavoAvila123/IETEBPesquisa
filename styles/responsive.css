@@ -9,7 +9,7 @@
 
   .login-brand {
     min-height: 0;
-    margin-bottom: 8px;
+    margin-bottom: clamp(14px, 2.5vh, 28px);
   }
 
   .login-brand__logo-wrap {
@@ -78,7 +78,7 @@
 
   .login-brand {
     min-height: 0;
-    margin-bottom: 8px;
+    margin-bottom: clamp(14px, 2.5vh, 28px);
   }
 
   .login-brand__logo-wrap {
@@ -119,7 +119,7 @@
   }
 
   .login-brand {
-    margin-bottom: 8px;
+    margin-bottom: clamp(14px, 2.5vh, 28px);
   }
 
   .login-brand__logo-wrap {
@@ -194,7 +194,7 @@
   }
 
   .login-brand {
-    margin-bottom: 8px;
+    margin-bottom: clamp(14px, 2.5vh, 28px);
   }
 
   .login-brand__logo-wrap {
@@ -254,7 +254,7 @@
   }
 
   .login-brand {
-    margin-bottom: 4px;
+    margin-bottom: clamp(12px, 2vh, 20px);
   }
 
   .login-brand__logo-wrap {
@@ -394,7 +394,7 @@
   .login-brand {
     width: calc(100% - 16px);
     justify-content: center;
-    margin-bottom: 6px;
+    margin-bottom: clamp(14px, 2.5vh, 24px);
   }
 
   .login-brand__logo-wrap {

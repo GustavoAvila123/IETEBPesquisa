@@ -82,7 +82,7 @@ body.register-body .church-picker {
   gap: 16px;
   width: min(520px, calc(100% - 24px));
   min-height: 0;
-  margin-bottom: 8px;
+  margin-bottom: clamp(16px, 3vh, 32px);
   align-self: center;
 }
 
