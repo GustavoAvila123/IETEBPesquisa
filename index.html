@@ -40,7 +40,7 @@
 
       <div class="login-form">
         <label class="login-field">
-          <span class="login-field__label">E-mail</span>
+          <span class="login-field__label" onclick="event.stopPropagation(); event.preventDefault();">E-mail</span>
           <!-- input class="login-field__input" type="email" id="email" placeholder="seu@email.com" autocomplete="email" -->
           <input class="login-field__input" type="email" id="email" placeholder="seu@email.com" readonly />
           <!-- <input class="login-field__input" type="email" id="email" placeholder="seu@email.com" autocomplete="email" /> -->
@@ -48,7 +48,7 @@
         <div class="field-error" id="emailError" aria-live="polite"></div>
 
         <label class="login-field">
-          <span class="login-field__label">Senha</span>
+          <span class="login-field__label" onclick="event.stopPropagation(); event.preventDefault();">Senha</span>
           <div class="login-field__input-wrap">
             <!-- <input class="login-field__input" type="password" id="password" placeholder="Sua senha" autocomplete="current-password" /> -->
             <input class="login-field__input" type="password" id="password" placeholder="Sua senha" readonly />
