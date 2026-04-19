@@ -301,7 +301,7 @@ function finalizarFluxoPesquisa() {
 
   const popup = document.getElementById("popupObrigado");
   popup.querySelector("h2").textContent =
-    "Obrigado por responder a esta pesquisa, em breve você receberá mais informações";
+    "Obrigado por participar da pesquisa. Em breve você receberá mais informações sobre nossos cursos.";
 
   abrirObrigado();
 }
