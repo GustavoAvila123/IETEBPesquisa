@@ -232,14 +232,57 @@ function fecharExplorarCursos() {
   if (el) el.textContent = "";
 }
 
+const _FRASES_IETEB = [
+  "Formando líderes.",
+  "Teologia com propósito.",
+  "Fé e conhecimento.",
+  "Servindo com excelência.",
+  "Sua missão começa aqui."
+];
+let _ietebFraseIdx = 0, _ietebCharIdx = 0, _ietebApagando = false, _timerIeteb = null;
+
+function _typewriterIeteb() {
+  const el = document.getElementById("ietebFrase");
+  if (!el) return;
+  const frase = _FRASES_IETEB[_ietebFraseIdx];
+
+  if (!_ietebApagando) {
+    el.textContent = frase.slice(0, ++_ietebCharIdx);
+    if (_ietebCharIdx === frase.length) {
+      _ietebApagando = true;
+      _timerIeteb = setTimeout(_typewriterIeteb, 1600);
+    } else {
+      _timerIeteb = setTimeout(_typewriterIeteb, 60);
+    }
+  } else {
+    el.textContent = frase.slice(0, --_ietebCharIdx);
+    if (_ietebCharIdx === 0) {
+      _ietebApagando = false;
+      _ietebFraseIdx = (_ietebFraseIdx + 1) % _FRASES_IETEB.length;
+      _timerIeteb = setTimeout(_typewriterIeteb, 300);
+    } else {
+      _timerIeteb = setTimeout(_typewriterIeteb, 35);
+    }
+  }
+}
+
 function abrirConhecaIETEB() {
   const modal = document.getElementById("modalConhecaIETEB");
-  if (modal) modal.style.display = "flex";
+  if (!modal) return;
+  modal.style.display = "flex";
+  const box = modal.querySelector(".modal-box");
+  if (box) box.scrollTop = 0;
+  clearTimeout(_timerIeteb);
+  _ietebCharIdx = 0; _ietebApagando = false;
+  _typewriterIeteb();
 }
 
 function fecharConhecaIETEB() {
   const modal = document.getElementById("modalConhecaIETEB");
   if (modal) modal.style.display = "none";
+  clearTimeout(_timerIeteb);
+  const el = document.getElementById("ietebFrase");
+  if (el) el.textContent = "";
 }
 
 function fecharPopupResponda() {

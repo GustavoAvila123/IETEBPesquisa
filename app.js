@@ -2729,7 +2729,26 @@ function finalizarFluxoPesquisa() {
   const respostas = coletarRespostas();
 
   if (window.db) {
-    window.db.collection("pesquisas").add(respostas).catch(err => {
+    const now = new Date();
+    const pad = n => String(n).padStart(2, "0");
+    const nomeSafe = (respostas.nome || "sem-nome")
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s+/g, "_")
+      .replace(/[^a-zA-Z0-9_\-]/g, "")
+      .slice(0, 50) || "sem-nome";
+    const dd  = pad(now.getDate());
+    const mm  = pad(now.getMonth() + 1);
+    const aa  = String(now.getFullYear()).slice(-2);
+    const hh  = pad(now.getHours());
+    const min = pad(now.getMinutes());
+    const ss  = pad(now.getSeconds());
+    // Reverse timestamp so newest document ID sorts first alphabetically
+    const revTs = String(9999999999999 - now.getTime()).padStart(13, "0");
+    const docId = `${revTs}_${nomeSafe}_${dd}-${mm}-${aa}_${hh}:${min}:${ss}`;
+    window.db.collection("pesquisas").doc(docId).set({
+      ...respostas,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).catch(err => {
       console.error("Erro ao salvar pesquisa:", err);
     });
   }
