@@ -192,6 +192,81 @@
     }
     tr:hover td { background: rgba(255,255,255,0.04); }
     #emptyMsg { text-align: center; color: #64748b; padding: 24px; }
+
+    /* ── PAGINAÇÃO ── */
+    .pagination-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .page-size-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .page-size-group span {
+      font-size: 12px;
+      color: #7dd3fc;
+    }
+    .page-size-btn {
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(0,153,255,0.35);
+      background: rgba(0,0,0,0.35);
+      color: #e2e8f0;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .page-size-btn.active {
+      background: rgba(0,153,255,0.4);
+      border-color: rgba(0,153,255,0.8);
+      color: #fff;
+      font-weight: 600;
+    }
+    .page-size-btn:hover:not(.active) {
+      background: rgba(0,153,255,0.15);
+    }
+    .page-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .page-info {
+      font-size: 12px;
+      color: #94a3b8;
+      white-space: nowrap;
+    }
+    .page-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      border: 1px solid rgba(0,153,255,0.35);
+      background: rgba(0,0,0,0.35);
+      color: #e2e8f0;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .page-btn.active {
+      background: rgba(0,153,255,0.4);
+      border-color: rgba(0,153,255,0.8);
+      color: #fff;
+      font-weight: 600;
+    }
+    .page-btn:hover:not(.active):not(:disabled) {
+      background: rgba(0,153,255,0.15);
+    }
+    .page-btn:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
   </style>
 </head>
 <body>
@@ -293,9 +368,21 @@
           </tr>
         </thead>
         <tbody id="tabelaRespostas">
-          <tr><td colspan="9" id="emptyMsg">Carregando...</td></tr>
+          <tr><td colspan="10" id="emptyMsg">Carregando...</td></tr>
         </tbody>
       </table>
+
+      <div class="pagination-bar" id="paginationBar">
+        <div class="page-size-group">
+          <span>Por página:</span>
+          <button class="page-size-btn active" data-size="10" onclick="setPageSize(10)">10</button>
+          <button class="page-size-btn" data-size="20" onclick="setPageSize(20)">20</button>
+          <button class="page-size-btn" data-size="30" onclick="setPageSize(30)">30</button>
+          <button class="page-size-btn" data-size="40" onclick="setPageSize(40)">40</button>
+          <button class="page-size-btn" data-size="50" onclick="setPageSize(50)">50</button>
+        </div>
+        <div id="pageNav" class="page-nav"></div>
+      </div>
     </div>
   </div>
 
@@ -343,6 +430,9 @@
 
     const charts = {};
     let allDocs = [];
+    let currentPage = 1;
+    let pageSize = 10;
+    let lastTabelaDocs = [];
 
     function label(campo, valor) {
       if (!valor) return "—";
@@ -431,25 +521,78 @@
       });
     }
 
-    function renderTabela(docs) {
+    function renderTabela(docs, resetPage) {
+      lastTabelaDocs = docs;
+      if (resetPage) currentPage = 1;
+
+      const total = docs.length;
+      const totalPages = Math.max(1, Math.ceil(total / pageSize));
+      if (currentPage > totalPages) currentPage = totalPages;
+
+      const start = (currentPage - 1) * pageSize;
+      const pageDocs = docs.slice(start, start + pageSize);
+
       const tbody = document.getElementById("tabelaRespostas");
-      if (docs.length === 0) {
+      if (total === 0) {
         tbody.innerHTML = '<tr><td colspan="10" id="emptyMsg">Nenhuma resposta ainda.</td></tr>';
-        return;
+      } else {
+        tbody.innerHTML = pageDocs.map((d, i) => `
+          <tr>
+            <td>${start + i + 1}</td>
+            <td>${d.nome || "—"}</td>
+            <td>${d.telefone || "—"}</td>
+            <td>${d.email || "—"}</td>
+            <td>${label("curso", d.curso)}</td>
+            <td>${label("formato", d.formato)}</td>
+            <td>${label("local", d.local)}</td>
+            <td>${label("regional", d.regional) !== "—" ? label("regional", d.regional) : (d.regional || "—")}</td>
+            <td>${label("dias", d.diasAoVivo || d.diasPresencial)}</td>
+            <td>${d.respondidoEm ? new Date(d.respondidoEm).toLocaleString("pt-BR") : "—"}</td>
+          </tr>`).join("");
       }
-      tbody.innerHTML = docs.map((d, i) => `
-        <tr>
-          <td>${i + 1}</td>
-          <td>${d.nome || "—"}</td>
-          <td>${d.telefone || "—"}</td>
-          <td>${d.email || "—"}</td>
-          <td>${label("curso", d.curso)}</td>
-          <td>${label("formato", d.formato)}</td>
-          <td>${label("local", d.local)}</td>
-          <td>${label("regional", d.regional) !== "—" ? label("regional", d.regional) : (d.regional || "—")}</td>
-          <td>${label("dias", d.diasAoVivo || d.diasPresencial)}</td>
-          <td>${d.respondidoEm ? new Date(d.respondidoEm).toLocaleString("pt-BR") : "—"}</td>
-        </tr>`).join("");
+
+      renderPaginacao(total, totalPages);
+    }
+
+    function renderPaginacao(total, totalPages) {
+      const nav = document.getElementById("pageNav");
+      if (total === 0) { nav.innerHTML = ""; return; }
+
+      const start = (currentPage - 1) * pageSize + 1;
+      const end   = Math.min(currentPage * pageSize, total);
+
+      let html = `<span class="page-info">${start}–${end} de ${total}</span>`;
+      html += `<button class="page-btn" onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? "disabled" : ""}>&#8249;</button>`;
+
+      const delta = 2;
+      const pages = new Set([1, totalPages]);
+      for (let p = Math.max(1, currentPage - delta); p <= Math.min(totalPages, currentPage + delta); p++) pages.add(p);
+      const sorted = [...pages].sort((a, b) => a - b);
+
+      let prev = 0;
+      sorted.forEach(p => {
+        if (p - prev > 1) html += `<span class="page-info">…</span>`;
+        html += `<button class="page-btn ${p === currentPage ? "active" : ""}" onclick="goPage(${p})">${p}</button>`;
+        prev = p;
+      });
+
+      html += `<button class="page-btn" onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? "disabled" : ""}>&#8250;</button>`;
+      nav.innerHTML = html;
+    }
+
+    function goPage(p) {
+      const totalPages = Math.max(1, Math.ceil(lastTabelaDocs.length / pageSize));
+      if (p < 1 || p > totalPages) return;
+      currentPage = p;
+      renderTabela(lastTabelaDocs);
+    }
+
+    function setPageSize(size) {
+      pageSize = size;
+      document.querySelectorAll(".page-size-btn").forEach(btn => {
+        btn.classList.toggle("active", parseInt(btn.dataset.size) === size);
+      });
+      renderTabela(lastTabelaDocs, true);
     }
 
     function atualizarDashboard(docs) {
@@ -477,7 +620,7 @@
       renderChart("chartRegional",       "bar",      Object.keys(reg), Object.values(reg), LABELS.regional);
       renderChart("chartInteresse",      "doughnut", Object.keys(int), Object.values(int), { sim: "Sim — Tem interesse", nao: "Não — Sem interesse" });
 
-      renderTabela(docs.filter(d => d.interesse !== "nao"));
+      renderTabela(docs.filter(d => d.interesse !== "nao"), true);
     }
 
     function iniciarDashboard() {
